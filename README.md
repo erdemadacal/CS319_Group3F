@@ -3,7 +3,7 @@ CS319 Object Oriented Software Engineering Fall'17 <br/>
 __Instructor:__ Bora Güngören <br/>
 __Section 3 – Group 3F__       
 * [İrem Ural, 21502278](https://github.com/iremural/)
-* [Alper Mehmet Özdemir, 21501955](https://google.com.tr)       
+* [Alper Mehmet Özdemir, 21501955](https://github.com/AlperMehmetOzdemir)       
 * [Hasan Selim Yağcı, 21402052](https://github.com/selimyagci/)
 * [Erdem Adaçal, 21400938](https://github.com/erdemadacal/)
 ## Project Description
