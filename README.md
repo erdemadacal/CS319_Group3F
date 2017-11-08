@@ -14,3 +14,5 @@ to change its color to switch the types of bullets he/she can shoot and also eff
 game environment. Bullets will only be able to harm enemies that posses the same color as itself. The game will
 contain  power-ups such as med-kits, increase bullet power, speed-up etc. The enemies will have different behaviours
 (eg. simply walk left-right, shoot if the player is in the direction it is facing, constantly jump while moving etc.).
+
+![alt text](https://media.giphy.com/media/3o6fJbCNY3Dy7tje1O/giphy.gif)
