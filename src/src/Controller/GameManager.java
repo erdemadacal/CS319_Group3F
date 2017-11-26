@@ -17,6 +17,7 @@ public class GameManager {
 	//private SoundManager sm;
 	//private CollisionManager cm;
 	//private InputManager im;
+	//de
 	private Player p;
 	private MapObject mapObject;
 	private TileMap tileMap;

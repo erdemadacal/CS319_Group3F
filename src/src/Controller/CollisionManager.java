@@ -14,7 +14,7 @@ public class CollisionManager {
     private Player p;
 
     private final int SCREEN_WIDTH  = 1280;
-    private final int SCREEN_HEİGHT = 960;
+    private final int SCREEN_HEIGHT = 960;
 
     private double x = p.getx();
     private double y = p.gety();
