@@ -50,6 +50,7 @@ public class GameManager {
 			@Override
 			public void run() {
 				new GameManager();
+				//gdjgdfjhf
 				//new MainMenuView(gm);
 				//m.gamePanel.a();
 			}

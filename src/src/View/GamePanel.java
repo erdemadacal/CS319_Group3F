@@ -31,7 +31,7 @@ public class GamePanel extends JPanel{
 	private boolean running;
 	public long elapsedTime;
 	private Bullet b;
-
+    //yeni
 	// constructor
 	public GamePanel(GameManager gm){
 		super();
