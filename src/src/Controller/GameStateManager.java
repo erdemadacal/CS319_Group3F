@@ -7,6 +7,7 @@ import Model.Walker;
 import Model.Bullet;
 import Model.Enemy;
 import Model.Player;
+import java.io.*;
 
 public class GameStateManager {
 	private MapObject currentMap;
@@ -14,10 +15,13 @@ public class GameStateManager {
 	private ArrayList<Enemy> enemies;
 	private Player p;
 	
+	
 	public GameStateManager() {
 		currentMap = new MapObject();
+		System.out.println("map object created");
 		tileMap = currentMap.getTileMap();
 		p = currentMap.getPlayer();
+		System.out.println("player created");
 		enemies = currentMap.getEnemies();
 	}
 	
@@ -27,7 +31,7 @@ public class GameStateManager {
 		
 		//level view
 		//bg = new Background("/BackGround.gif", 0.1);
-		p.setPosition(100,100);
+		p.setPosition(100,500);
 		populateEnemies();
 		
 		//bgMusic = new AudioPlayer("/Music/level1-1.mp3");

@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import Controller.GameManager;
+
 public class MainMenuView implements KeyListener {
 
 	JFrame gameFrame;
@@ -29,10 +31,13 @@ public class MainMenuView implements KeyListener {
 
 	// Card Layout
 	private CardLayout cardLayout;
+	
+	//controller
+	private GameManager gm;
 
-	public MainMenuView() {
+	public MainMenuView(GameManager gm){
 		gameFrame = new JFrame("Color Shooter: The Spectrum Adventurer");
-
+       this.gm = gm;
 		
 		// create cards
 		mainMenuP = new MainMenuPanel();
@@ -40,7 +45,7 @@ public class MainMenuView implements KeyListener {
 		changeSettingsP = new ChangeSettingsPanel();
 		pauseMenuP = new PauseMenuPanel();
 		helpP = new HelpPanel();
-		gamePanel = new GamePanel();//gm);
+		gamePanel = new GamePanel(gm);
 
 		cards = new JPanel();
 		cardLayout = new CardLayout();
@@ -86,55 +91,6 @@ public class MainMenuView implements KeyListener {
 		gameFrame.pack();
 		gameFrame.setVisible(true);
 	}
-
-	public static void main(String[] args) {
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new MainMenuView();
-				//m.gamePanel.a();
-			}
-		});
-	}
-	public void keyPressed(KeyEvent e)
-	{
-		int c = e.getKeyCode();
-		//if(cards.)
-		if(c == KeyEvent.VK_LEFT)
-		{
-			System.out.println("LEFT");
-			gamePanel.update(0);
-		}
-		else if(c == KeyEvent.VK_RIGHT)
-		{
-			System.out.println("RIGHT");
-			gamePanel.update(1);
-		}
-		else if(c == KeyEvent.VK_UP)
-		{
-			System.out.println("UP");
-			gamePanel.update(2);
-		}
-		else if(c == KeyEvent.VK_DOWN)
-		{
-			System.out.println("DOWN");
-			gamePanel.update(3);
-		}
-		else if(c == KeyEvent.VK_SPACE)
-		{
-			System.out.println("SHOOTING");
-			gamePanel.update(4);
-		}
-		else if(c == KeyEvent.VK_ESCAPE)
-		{
-			System.out.println("BYE!");
-			gamePanel.update(5);
-		}
-		
-	}
-	public void keyTyped(KeyEvent e) {}
-	public void keyReleased(KeyEvent e) {}
 	
 	public void displayMenuPanel() {
 		cardLayout.show(cards, "1");
@@ -157,43 +113,98 @@ public class MainMenuView implements KeyListener {
 
 	public void displayPauseMenu() {}
 	
+	public void keyPressed(KeyEvent e)
+	{
+		int c = e.getKeyCode();
+
+		if(c == KeyEvent.VK_LEFT)
+		{
+			System.out.println("LEFT");
+			gm.updateLevelView(0);
+		}
+		else if(c == KeyEvent.VK_RIGHT)
+		{
+			System.out.println("RIGHT");
+			gm.updateLevelView(1);
+		}
+		else if(c == KeyEvent.VK_UP)
+		{
+			System.out.println("UP");
+			gm.updateLevelView(2);
+		}
+		else if(c == KeyEvent.VK_DOWN)
+		{
+			System.out.println("DOWN");
+			gm.updateLevelView(3);
+		}
+		else if(c == KeyEvent.VK_SPACE)
+		{
+			System.out.println("SHOOTING");
+			gm.updateLevelView(4);
+		}
+		else if(c == KeyEvent.VK_ESCAPE)
+		{
+			System.out.println("BYE!");
+			gm.updateLevelView(5);
+		}
+		
+	}
+	//yeni
+	public void updateGamePanel(int i)
+	{
+		if(i == 0)
+			gamePanel.update(0);
+		else if (i == 1)
+			gamePanel.update(1);
+		else if (i == 2)
+			gamePanel.update(2);
+		else if(i == 3)
+			gamePanel.update(3);
+		else if(i == 4)
+			gamePanel.update(4);
+		else if(i == 5)
+			gamePanel.update(5);
+	}
+	
+	public void keyTyped(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {}
 
 	public class MenuListener implements ActionListener, MouseListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 
 			if (mainMenuP.getNewGameButton() == event.getSource()) {
-				displayLevelPanel();
+				gm.changeView(0);
+				
 			} 
 			else if (mainMenuP.getContinueGameButton() == event.getSource()) {
 				// gsm levelView
 			}
 			else if (mainMenuP.getChangeSettingsButton() == event.getSource()) {
-				displayChangeSettingsPanel();
+				gm.changeView(1);
 			}
 			else if (mainMenuP.getViewHelpButton() == event.getSource()) {
-				displayHelpPanel();
+				gm.changeView(2);
 			} 
 			else if (mainMenuP.getCreditsButton() == event.getSource()) {
-				displayCreditsPanel();
+				gm.changeView(3);	
 			} 
 			else if (mainMenuP.getExitButton() == event.getSource()) {
 				System.exit(0);
 			}
 
 			else if (creditsP.getReturnButton() == event.getSource()) {
-				displayMenuPanel();
+				gm.changeView(4);
 			} 
 			else if (changeSettingsP.getReturnButton() == event.getSource()) {
-				displayMenuPanel();
+				gm.changeView(4);
 			}
 			if (helpP.getReturnButton() == event.getSource()) {
-				displayMenuPanel();
+				gm.changeView(4);
 			}
 			
 		}
 
-		
 		@Override
 		public void mouseClicked(MouseEvent event) {}
 		public void mouseEntered(MouseEvent event) {};

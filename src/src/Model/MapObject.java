@@ -16,7 +16,7 @@ public class MapObject {
 	}
 
 	private ArrayList<Enemy> enemies;
-	//private ArrayList<Powerup> powerups;
+	//private ArrayList<Powerup> powerups;i
 	private ArrayList<Bullet> bullets;
 
 	public MapObject() {

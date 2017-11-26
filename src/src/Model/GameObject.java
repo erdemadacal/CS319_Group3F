@@ -83,6 +83,8 @@ public class GameObject {
 	public GameObject(TileMap tm) {
 		tileMap = tm;
 		tileSize = tm.getTileSize();
+		right = true;
+		left = false;
 	}
 
 	// for collision detection
@@ -96,12 +98,12 @@ public class GameObject {
 		return new Rectangle((int) x - cwidth, (int) y - cheight, cwidth, cheight);
 	}
 
-	public boolean isLeft() {
-		return left;
-	}
-
 	public boolean isRight() {
 		return right;
+	}
+	
+	public boolean isLeft() {
+		return left;
 	}
 
 	public void setPosition(double x, double y) {
@@ -119,14 +121,12 @@ public class GameObject {
 		ymap = tileMap.gety();
 	}
 
-	public void setLeft(boolean b) {
-		left = b;
-	}
-
 	public void setRight(boolean b) {
 		right = b;
 	}
-
+	public void setLeft(boolean b){
+		left = b;
+	}
 	public void setDown(boolean b) {
 		down = b;
 	}

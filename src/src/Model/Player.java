@@ -123,7 +123,7 @@ public class Player extends GameObject {
 	public void getNextPosition() // by reading
 	{
 		// movement
-		if (left) {
+		if (!right) {
 			dx = dx - moveSpeed;
 			if (dx < -maxSpeed)
 				dx = -maxSpeed;
@@ -183,7 +183,7 @@ public class Player extends GameObject {
 		
 		if(right)
 			g.drawImage(sprite.getImage(), (int) (x + xmap - width / 2), (int) (y + ymap - height / 2), null);
-		else if(left)
+		else if(!right)
 			g.drawImage(sprite.getImage(), (int) (x + xmap - width / 2 + width), (int) (y + ymap - height / 2), -width,
 				height, null);
 			
@@ -193,6 +193,7 @@ public class Player extends GameObject {
 	public void die(){
 		this.dead = true;
 		deaths++;
+		System.out.println("Died: " + deaths + " many times!");
 	}
 	public ArrayList<Bullet> getBullets() {
 		return bullets;

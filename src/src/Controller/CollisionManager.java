@@ -60,7 +60,7 @@ public class CollisionManager {
         falling = p.getFalling();
     }
 
-    public void calculateCorners(double x, double y) {
+   /* public void calculateCorners(double x, double y) {
 
         int leftTile = (int) (x - cwidth / 2) / tileSize;
         int rightTile = (int) (x + cwidth / 2 - 1) / tileSize;
@@ -72,7 +72,7 @@ public class CollisionManager {
         bl = tileMap.getType(bottomTile, leftTile);
         br = tileMap.getType(bottomTile, rightTile);
        }
-
+    */
     void handleAllCollisions(){
         try{
             handlePlayerCollision(mapObject.getPlayer());
@@ -118,7 +118,7 @@ public class CollisionManager {
         xtemp = x;
         ytemp = y;
 
-        calculateCorners( p.getx(), ydest);
+       // calculateCorners( p.getx(), ydest);
         if (dy < 0) {
             //if (topLeft|| topRight) {
             if(tl == 1 || tl == 2 || tr == 1 || tr == 2){
@@ -151,7 +151,7 @@ public class CollisionManager {
                 ytemp = ytemp + dy;
             }
         }
-        calculateCorners(xdest, y);
+      //  calculateCorners(xdest, y);
         if (dx < 0) // going left
         {
             //if (topLeft || bottomLeft) {
@@ -184,7 +184,7 @@ public class CollisionManager {
             }
         }
         if (!falling) {
-            calculateCorners(x, ydest + 1);
+           // calculateCorners(x, ydest + 1);
             if ( !(bl == 1 || bl == 2 || br == 1 || br == 2 ) ) {
                 falling = true;
             }
