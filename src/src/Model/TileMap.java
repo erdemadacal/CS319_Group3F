@@ -83,6 +83,7 @@ public class TileMap {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public int getTileSize() {
 		return tileSize;
@@ -130,5 +131,10 @@ public class TileMap {
 				g.drawImage(tiles[r][c].getImage(), (int) x + col * tileSize, (int) y + row * tileSize, null);
 			}
 		}
+	}
+
+	public int getType(int row, int col) {
+		// TODO Auto-generated method stub
+		return map[row][col] / 4;
 	}
 }
