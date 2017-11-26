@@ -33,12 +33,12 @@ public class GamePanel extends JPanel{
 	private Bullet b;
 
 	// constructor
-	public GamePanel(){
+	public GamePanel(GameManager gm){
 		super();
 		elapsedTime = 0;
 		running = true;
 
-		gm = new GameManager();
+		this.gm = gm; 
 		// add(title);
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
@@ -76,7 +76,7 @@ public class GamePanel extends JPanel{
 			System.exit(0);
 		repaint();
 	}
-		public void a() {
+		/*public void a() {
 			SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {				
@@ -93,7 +93,7 @@ public class GamePanel extends JPanel{
 						}
 				}
 			});
-		}
+		}*/
 		
 		private void update() {
 			gm.updateAll();

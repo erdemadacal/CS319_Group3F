@@ -4,6 +4,7 @@ import Model.Enemy;
 import Model.Player;
 import Model.TileMap;
 import View.GamePanel;
+import View.MainMenuView;
 import Model.Bullet;
 import Model.MapObject;
 
@@ -11,6 +12,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
+import javax.swing.SwingUtilities;
 
 public class GameManager {
 	private GameStateManager gsm;
@@ -24,9 +27,12 @@ public class GameManager {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Bullet> bullets;
 	private Graphics2D g2;
+	private MainMenuView view;
 
 	public GameManager() {
 		gsm = new GameStateManager();
+		view = new MainMenuView(this);
+		this.view.displayMenuPanel();
 		gsm.set();
 		mapObject = gsm.getCurrentMap();
 		tileMap = mapObject.getTileMap();
@@ -38,6 +44,46 @@ public class GameManager {
 		//im = new InputManager();
 	}
 
+	public static void main(String[] args) {
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new GameManager();
+				//new MainMenuView(gm);
+				//m.gamePanel.a();
+			}
+		});
+	}
+	public void changeView(int i)
+	{
+		if(i == 0)
+			view.displayLevelPanel();
+		else if (i == 1)
+			view.displayChangeSettingsPanel();
+		else if (i == 2)
+			view.displayHelpPanel();
+		else if(i == 3)
+			view.displayCreditsPanel();
+		else if(i == 4)
+			view.displayMenuPanel();	
+	}
+	public void updateLevelView(int i)
+	{
+		if(i == 0)
+			view.updateGamePanel(0);
+		else if (i == 1)
+			view.updateGamePanel(1);
+		else if (i == 2)
+			view.updateGamePanel(2);
+		else if(i == 3)
+			view.updateGamePanel(3);
+		else if(i == 4)
+			view.updateGamePanel(4);
+		else if(i == 4)
+			view.updateGamePanel(5);
+	}
+	
 	public void updateAll() {
 		try {
 			updatePlayer();

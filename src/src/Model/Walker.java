@@ -27,7 +27,7 @@ public class Walker extends Enemy {
 		// load sprites
 
 		try {
-			BufferedImage image = ImageIO.read(new File("Resources/Player/as1.png"));// enemy
+			BufferedImage image = ImageIO.read(new File("src/Resources/Player/as1.png"));// enemy
 			sprite = new Sprite(image, 5);
 		} catch (Exception e) {
 			e.printStackTrace();
