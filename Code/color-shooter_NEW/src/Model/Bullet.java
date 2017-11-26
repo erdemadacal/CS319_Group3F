@@ -9,6 +9,7 @@ public class Bullet extends GameObject {
 	private boolean hit; // bullet hit stg or not
 	private boolean remove; // remove the bullet from the game
 	private int color;
+	//deneme
 
 	public Bullet(TileMap tm, boolean right, int color) {
 		super(tm);
