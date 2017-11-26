@@ -16,18 +16,18 @@ public class CollisionManager {
     private final int SCREEN_WIDTH  = 1280;
     private final int SCREEN_HEIGHT = 960;
 
-    private double x = p.getx();
-    private double y = p.gety();
-    private double dx = p.getdx();
-    private double dy = p.getdy();
+    private double x ;
+    private double y ;
+    private double dx ;
+    private double dy ;
 
-    private int currCol = p.getCurrCol();
-    private int currRow = p.getCurrRow();
-    private TileMap tileMap = p.getTileMap();
-    private int tileSize = p.getTileSize();
+    private int currCol ;
+    private int currRow ;
+    private TileMap tileMap;
+    private int tileSize;
 
-    private int cwidth = p.getCWidth();
-    private int cheight = p.getCHeight();
+    private int cwidth;
+    private int cheight;
 
     private double xdest;
     private double ydest;
@@ -37,12 +37,27 @@ public class CollisionManager {
     private int bl = 0;
     private int br = 0;
 
-    private boolean falling = p.getFalling();
+    private boolean falling;
 
     public CollisionManager(MapObject mapObject){
 
         this.mapObject = mapObject;
         p = mapObject.getPlayer();
+        
+        x = p.getx();
+        y = p.gety();
+        dx = p.getdx();
+        dy = p.getdy();
+        
+        currCol = p.getCurrCol();
+        currRow = p.getCurrRow();
+        tileMap = p.getTileMap();
+        tileSize = p.getTileSize();
+        
+        cwidth = p.getCWidth();
+        cheight = p.getCHeight();
+        
+        falling = p.getFalling();
     }
 
     public void calculateCorners(double x, double y) {
@@ -52,10 +67,10 @@ public class CollisionManager {
         int topTile = (int) (y - cheight / 2 ) / tileSize;
         int bottomTile = (int) (y + cheight/ 2 - 1 ) / tileSize;
 
-     /*   tl = tileMap.getType(topTile, leftTile);
+        tl = tileMap.getType(topTile, leftTile);
         tr = tileMap.getType(topTile, rightTile);
         bl = tileMap.getType(bottomTile, leftTile);
-        br = tileMap.getType(bottomTile, rightTile);*/
+        br = tileMap.getType(bottomTile, rightTile);
        }
 
     void handleAllCollisions(){
