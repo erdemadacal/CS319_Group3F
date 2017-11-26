@@ -31,7 +31,7 @@ public class GamePanel extends JPanel{
 	private boolean running;
 	public long elapsedTime;
 	private Bullet b;
-    //yeni
+    //yenimergeolmadi
 	// constructor
 	public GamePanel(GameManager gm){
 		super();
@@ -71,9 +71,10 @@ public class GamePanel extends JPanel{
 		TileMap tm = gm.getTileMap();
 			b = new Bullet(tm,true,1);
 			p.getBullets().add(b);
-			draw();}
+			draw();
+		}
 		else if(i == 5)	
-			System.exit(0);
+		
 		repaint();
 	}
 		/*public void a() {

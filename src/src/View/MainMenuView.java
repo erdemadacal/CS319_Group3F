@@ -149,7 +149,7 @@ public class MainMenuView implements KeyListener {
 		}
 		
 	}
-	//yeni
+	//yenimergeolmadi
 	public void updateGamePanel(int i)
 	{
 		if(i == 0)

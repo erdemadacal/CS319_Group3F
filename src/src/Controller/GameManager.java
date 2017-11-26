@@ -50,13 +50,13 @@ public class GameManager {
 			@Override
 			public void run() {
 				new GameManager();
-				//gdjgdfjhf
+				//yenimergeolmadi
 				//new MainMenuView(gm);
 				//m.gamePanel.a();
 			}
 		});
 	}
-	public void changeView(int i)
+	public void changeView(int i) //change view menus 
 	{
 		if(i == 0)
 			view.displayLevelPanel();
@@ -72,17 +72,17 @@ public class GameManager {
 	public void updateLevelView(int i)
 	{
 		if(i == 0)
-			view.updateGamePanel(0);
+			view.updateGamePanel(0); //move player left
 		else if (i == 1)
-			view.updateGamePanel(1);
+			view.updateGamePanel(1); //move player right 
 		else if (i == 2)
-			view.updateGamePanel(2);
+			view.updateGamePanel(2); //move player up
 		else if(i == 3)
-			view.updateGamePanel(3);
+			view.updateGamePanel(3); //move player down
 		else if(i == 4)
-			view.updateGamePanel(4);
-		else if(i == 4)
-			view.updateGamePanel(5);
+			view.updateGamePanel(4); // shoot
+		else if(i == 5)
+			System.exit(0);
 	}
 	
 	public void updateAll() {

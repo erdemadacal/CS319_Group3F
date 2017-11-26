@@ -38,7 +38,7 @@ public class CollisionManager {
     private int br = 0;
 
     private boolean falling;
-
+    //yenimergeolmadi
     public CollisionManager(MapObject mapObject){
 
         this.mapObject = mapObject;
