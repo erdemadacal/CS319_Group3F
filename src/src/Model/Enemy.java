@@ -1,35 +1,56 @@
-package Model;
+package model;
 
-public class Enemy extends GameObject {
+import framework.GameObject;
+import framework.ObjectId;
 
-	// enemy stuff
-	protected int health;
-	protected int maxHealth;
-	protected boolean dead;
-	protected int damage;
+public abstract class Enemy extends GameObject {
 
-	public Enemy(TileMap tm) {
-		super(tm);
+	private int health;
+	private int maxHealth;
+	private int damage;
+	
+	protected float width = 64, height = 64;
+	protected float gravity = 0.3f;
+	protected final float MAX_SPEED = 10f;
+	//protected boolean remove;
+
+	public Enemy(float x, float y, int maxHealth, ObjectId id, ColorId color) {
+		super(x, y, id,color);
+		this.maxHealth = maxHealth;
+		health = maxHealth;
+		
+		//remove = false;
 	}
 
-	public void getNextPosition() {
+	public int getHealth() {
+		return health;
 	}
 
-	public boolean isDead() {
-		return dead;
+	/*public boolean getRemove()
+	{
+		return remove;
+	}
+	*/
+	public void reduceHealth(int reductionAmount) {
+		this.health -= reductionAmount;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 
 	public int getDamage() {
 		return damage;
 	}
 
-	public void hit(int damage) {
-		if (dead)
-			return;
-		health -= damage;
-		if (health < 0)
-			health = 0;
-		if (health == 0)
-			dead = true;
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
+	public boolean isDead() {
+		if(health <= 0)
+			return true;
+		else 
+			return false;
+	}
+	
 }

@@ -1,204 +1,223 @@
-package Model;
+package model;
 
-import javax.imageio.ImageIO;
-import java.util.ArrayList;
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.util.LinkedList;
+
+import framework.GameObject;
+import framework.Handler;
+import framework.ObjectId;
+import framework.Sound;
+import framework.Texture;
+import view.Camera;
+import view.GamePanel;
+
 public class Player extends GameObject {
 
-	private Sprite sprite;
+	private float width = 64, height = 64;
+	private float gravity = 0.3f;
+	private final float MAX_SPEED = 10f;
 
-	// player properties
+	private Handler handler;
+	
 	private int health;
-	private int maxHealth;
-	private boolean dead;
-	private int color;
-	private int rateOfFire;
-	private int deaths;
+	private boolean reachGoal;
+    private boolean restart;
+	Texture tex = GamePanel.getInstance();
+	
+	public Player(float x, float y, ObjectId id, ColorId color, Handler handler) {
+		super(x, y, id, color);
+		this.handler = handler;
+		reachGoal = false;
+		restart = false;
+		health = 5;
+	}
 
-	// bullet
-	private boolean shooting;
-	private int bulletDamage;
-	private ArrayList<Bullet> bullets;
-
-	// scratch
-	//private boolean scratching;
-	//private int scratchDamage;
-	//private int scratchRange;
-
-	// gliding
-	//private boolean gliding;
-
-	// animations
-//	private Sprite sprites;
-
-//	private final int[] numFrames = { // each actions frame number
-//			1,1,1,1,1};
-
-	// animation action
-	private static final int IDLE = 0;
-	private static final int WALKING = 1;
-	private static final int JUMPING = 2;
-	private static final int FALLING = 3;
-	private static final int SHOOTING = 4;
-
-
-	public Player(TileMap tm) {
-		super(tm);
-
-		width = 30;
-		height = 30;
-		cwidth = 20;
-		cheight = 20;
-
-		moveSpeed = 0.3;
-		maxSpeed = 1.6;
-		stopSpeed = 0.4;
-		fallSpeed = 0.15;
-		maxFallSpeed = 4.0;
-		jumpStart = -4.8;
-		stopJumpSpeed = 0.3;
-
-		facingRight = true;
-
-		health = maxHealth = 5;
-
-		bulletDamage = 5;
-		bullets = new ArrayList<Bullet>();
-
-
-		// load sprites
-		try {
-			BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/Player/Player_Blue_Weapon.gif"));
-
-			sprite = new Sprite( image, 4 );
-
-		} catch (Exception e) {
-			e.printStackTrace();
+	@Override
+	public void tick(LinkedList<GameObject> object) {
+		x += velX;
+		y += velY;
+		if (velX < 0) facing = -1;
+		else if (velX > 0) facing = 1;
+		
+		if (falling || jumping) {
+			velY += gravity;
+			if(velY > MAX_SPEED)
+				velY = MAX_SPEED;
 		}
-	}
-
-	public int getHealth() {
-		return health;
-	}
-
-	public int getMaxHealth() {
-		return maxHealth;
-	}
-
-	public int getColor(){return color;}
-
-	public void checkAttack(ArrayList<Enemy> enemies) {
-
-		// loop through enemies
-
-		for (int i = 0; i < enemies.size(); i++) {
-
-			Enemy e = enemies.get(i);
-
-			// bullets
-			for (int j = 0; j < bullets.size(); j++) {
-				if (bullets.get(j).intersects(e)) {
-					e.hit(bulletDamage);
-					bullets.get(j).setHit();
-					break;
-				}
-			}
-
-			// check enemy collision
-			if (intersects(e)) {
-				hit(e.getDamage());
-			}
+		// Jumping in hard difficulty
+		if (velY > 1 && !GamePanel.isEasy && !jumping) {
+			jumping = true;
+			velY = -10;
 		}
-	}
-
-	public void hit(int damage) {
-		health -= damage;
-		if (health < 0)
-			health = 0;
-		if (health == 0)
-			dead = true;
-	}
-
-	public void getNextPosition() // by reading
-	{
-		// movement
-		if (!right) {
-			dx = dx - moveSpeed;
-			if (dx < -maxSpeed)
-				dx = -maxSpeed;
-		} else if (right) {
-			dx = dx + moveSpeed;
-			if (dx > maxSpeed)
-				dx = maxSpeed;
-		} else {
-			if (dx > 0) {
-				dx = dx - stopSpeed;
-				if (dx < 0)
-					dx = 0;
-			} else if (dx < 0) {
-				dx = dx + stopSpeed;
-				if (dx > 0)
-					dx = 0;
-			}
+		// if player is sent off screen restart the level
+		if(y > GamePanel.HEIGHT)
+		{
+			
+			//restart = true;
+			System.out.println("PLAYER Y" + y);
+		   handler.loadLevel();
 		}
+		collision(object);
 
-		// jump
-		if (jumping && !falling) {
-			//sfx.get("jump").play();
-			dy = jumpStart;
-			falling = true;
-
-		}
-		// falling
-		if (falling) {
-			dy = dy + fallSpeed;
-
-			if (dy > 0)
-				jumping = false;
-
-			if (dy < 0 && !jumping)
-				dy = dy + stopJumpSpeed;
-
-			if (dy > maxFallSpeed)
-				dy = maxFallSpeed;
-		}
-	}
-
-	public boolean isShooting() {
-		return shooting;
 	}
 	
-	public void setShooting(boolean shooting) {
-		this.shooting = shooting;
+	public void setRestart(boolean b)
+	{
+		restart = b;
+	}
+	public boolean getRestart()
+	{
+		return restart;
+	}
+	
+	public int getHealth()
+	{
+		return health;
+	}
+	
+	public void setHealth(int health)
+	{
+		this.health = health;
+	}
+	
+	
+	private void collision(LinkedList<GameObject> object)
+	{
+		for(int i = 0; i < object.size(); i++)
+		{
+			GameObject tempObject = object.get(i);
+			// Collision with blocks
+			if(tempObject.getId() == ObjectId.Block)
+			{
+				// Collision with solid blocks and fading blocks
+			    if(tempObject.getColor() != color) {
+					// making the fading blocks start to fade
+					if(((Block)tempObject).getType() >= 4 && ((Block)tempObject).getType() < 8) {
+						if(getBounds().intersects(tempObject.getBounds()))
+								((Block)tempObject).setFading(true);
+					}
+								
+					// Collision on top side
+					if(getBoundsTop().intersects(tempObject.getBounds())) {
+						y = tempObject.getY() + 32;
+						velY = 0;	
+					}
+						
+					// Collision on bottom side
+					if(getBoundsBottom().intersects(tempObject.getBounds())) {
+						y = tempObject.getY() - height;
+						velY = 0;
+						falling = false;
+						jumping = false;
+					}
+					else {
+					    falling = true;
+					}
+								
+					// Collision on Right side
+					if(getBoundsRight().intersects(tempObject.getBounds())) {
+						x = (float)(tempObject.getX() - width);
+					}
+								
+					// Collision on Left side
+					if(getBoundsLeft().intersects(tempObject.getBounds())) {
+							x = (float) (tempObject.getX() + tempObject.getBounds().getWidth());
+					}
+			}
+							
+				// Collision with spikes
+				if(((Block)tempObject).getType() >= 8) {
+			     	if(getBounds().intersects(tempObject.getBounds()))
+			     	{
+			     		health--;
+			     	    if (health > 0)
+						   handler.loadLevel();
+			     	}
+					}
+							
+				}
+				// Collision with the level goal
+				else if (tempObject.getId() == ObjectId.Gate) {
+					//switch level
+					if(getBounds().intersects(tempObject.getBounds())) {
+						Sound.GATE.play();
+					   handler.switchLevel();
+					}
+				} 
+				// Collision with the enemy on any side
+				else if (tempObject.getId() == ObjectId.Enemy) {
+					if (getBounds().intersects(tempObject.getBounds())){
+						health--;
+			     	    if (health > 0)
+						   handler.loadLevel();	
+					}
+				}
+			
+			
+		}
+		
 	}
 
-	public void draw(Graphics2D g) {
-		setMapPosition();
-		//super.draw(g);
-		// draw bullets
-		/*for (Bullet b : bullets) {
-			b.draw(g);
-		}*/
-		
-		if(right)
-			g.drawImage(sprite.getImage(), (int) (x + xmap - width / 2), (int) (y + ymap - height / 2), null);
-		else if(!right)
-			g.drawImage(sprite.getImage(), (int) (x + xmap - width / 2 + width), (int) (y + ymap - height / 2), -width,
-				height, null);
-			
-		//g.drawImage(sprite.getImage(), 0, 0, null);
-			
+	public boolean isReachGoal() {
+		return reachGoal;
 	}
-	public void die(){
-		this.dead = true;
-		deaths++;
-		System.out.println("Died: " + deaths + " many times!");
+
+	public void setReachGoal(boolean reachGoal) {
+		this.reachGoal = reachGoal;
 	}
-	public ArrayList<Bullet> getBullets() {
-		return bullets;
+
+	@Override
+	// Renders the players on the panel
+	public void render(Graphics g) {
+		// Render players blue sprite
+		if(this.color == ColorId.Blue) {
+			if(facing == 1)
+				g.drawImage(tex.player[0], (int)x, (int)y, null);
+			else
+				g.drawImage(tex.player[1], (int)x, (int)y, null);
+		}
+		// Render players red sprite
+		else if(this.color == ColorId.Red) {
+			if(facing == 1)
+				g.drawImage(tex.player[2], (int)x, (int)y, null);
+			else
+				g.drawImage(tex.player[3], (int)x, (int)y, null);
+		}
+		// Render players green sprite
+		else if(this.color == ColorId.Green) {
+			if(facing == 1)
+				g.drawImage(tex.player[4], (int)x, (int)y, null);
+			else
+				g.drawImage(tex.player[5], (int)x, (int)y, null);
+		}	
+		//Graphics2D g2d = (Graphics2D) g;	
 	}
-	public int getDeaths(){
-		return  deaths;
+	
+
+	// Get bounds methods
+    // Get bounds for bottom collision
+	public Rectangle getBoundsBottom() {
+		return new Rectangle((int)(x + (width/4)), (int)((int)y + (height/2)), (int)width/2 ,(int)height/2);
 	}
+	// Get bounds for top collision
+	public Rectangle getBoundsTop() {
+		return new Rectangle((int)(x + (width/4)), (int)y, (int)width/2 ,(int)height/2);
+	}
+	// Get bounds for left collision
+	public Rectangle getBoundsLeft() {
+		return new Rectangle((int)x, (int)y + 5 , (int)5 ,(int)height - 10);
+	}
+	// Get bounds for right collision
+	public Rectangle getBoundsRight() {
+		return new Rectangle((int)(x + width - 5), (int)(y) + 5, (int)5 ,(int)height - 10);
+	}
+	// Get bounds for bullet collision
+	public Rectangle getBounds() {
+		return new Rectangle((int)x, (int)y, (int)width ,(int)height);
+	}
+	
+
 }
