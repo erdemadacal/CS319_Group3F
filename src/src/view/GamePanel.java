@@ -23,7 +23,7 @@ public class GamePanel extends JPanel {
 	public static int WIDTH = 1024, HEIGHT = 768;
 	
 	private BufferedImage level1 = null, background = null, level2 = null;
-	private BufferedImage heart = null, colorRed = null, colorBlue = null, colorGreen = null;
+	private BufferedImage shield = null, heart = null, colorRed = null, colorBlue = null, colorGreen = null;
 	
 	public static int levelWidth;
 
@@ -65,6 +65,7 @@ public class GamePanel extends JPanel {
 		level2 = loader.loadImage("/level2.png");
 		background = loader.loadImage("/BackGround.jpg");	// loading background
 		heart = loader.loadImage("/Heart.png");
+		shield = loader.loadImage("/shield.jpeg");
 		colorBlue = loader.loadImage("/Bullet_Blue.gif");
 		colorRed = loader.loadImage("/Bullet_Red.gif");
 		colorGreen = loader.loadImage("/Bullet_Green.gif");
@@ -82,6 +83,8 @@ public class GamePanel extends JPanel {
 			if(gm.getHandler().object.get(i).getId() == ObjectId.Player)
 				cam.tick(gm.getHandler().object.get(i));
 		}
+		
+		
 	}
 	
 	public JButton getReturnButton()
@@ -100,6 +103,11 @@ public class GamePanel extends JPanel {
 		g.drawImage(background, (int)cam.getX(), (int)cam.getY(), null);
 		for(int i=0 ; i < gm.getPlayerHealth(); i ++)
 			g.drawImage(heart, 50 + (45* i), 50, null);
+		for(int i=0 ; i < gm.getShieldUse(); i ++)
+			g.drawImage(shield, 700 + (70* i), 50, null);
+		
+		
+		
 	
         if(gm.getPlayerHealth()  == 0)
         { 
@@ -167,5 +175,6 @@ public class GamePanel extends JPanel {
 	public GameManager getGameManager() {
 		return gm;
 	}
+
 
 }

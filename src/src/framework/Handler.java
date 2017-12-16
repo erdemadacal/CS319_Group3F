@@ -10,6 +10,7 @@ import model.ColorId;
 import model.Flag;
 import model.Floater;
 import model.Player;
+import model.PowerUp;
 import model.Walker;
 import model.GameMap;
 import model.Jumper;
@@ -148,16 +149,18 @@ public class Handler
 					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green));
 				if(red == 100 && green == 100 && blue == 255)
 					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue));
+				// powerup
+				if(red == 255 && green == 10 && blue == 10)
+					addObject(new PowerUp(xx*32, yy*32, 0, ObjectId.PowerUp));
+				//if(red == 10 && green == 255 && blue == 10)
+					//addObject(new PowerUp(xx*32, yy*32, 1, ObjectId.PowerUp));
+				if(red == 10 && green == 255 && blue == 10)
+					addObject(new PowerUp(xx*32, yy*32, 2, ObjectId.PowerUp));
 				
 			}
 		}
 	}
 	
-	/*public int getCurrentLevel()
-	{
-		return currentLevel;
-	}
-	*/
 	public void switchLevel() {
 		int playerHealth = map.getPlayerHealth();
 		int playernumberOfDeaths = map.getNumberOfDeaths();
@@ -260,18 +263,5 @@ public class Handler
 		map.setPlayerHealth(health);
 	}
 	
-	/*public void createLevel()
-	{
-		for (int xx = 0; xx < Game.WIDTH * 2; xx +=32)
-			addObject(new Block(xx, Game.HEIGHT - 32, 0, ObjectId.Block, ));
-		
-		for (int xx =96; xx < Game.WIDTH - 128; xx +=32)
-			addObject(new Block(xx, Game.HEIGHT - 192, 0, ObjectId.Block));
-		
-		for (int yy =0; yy < Game.HEIGHT; yy +=32)
-			addObject(new Block(0, yy , 0, ObjectId.Block));
-		
-		for (int yy =0; yy < Game.HEIGHT; yy +=32)
-			addObject(new Block(Game.WIDTH * 2, yy, 0, ObjectId.Block));
-	}*/
+
 }

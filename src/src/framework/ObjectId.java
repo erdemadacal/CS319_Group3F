@@ -7,5 +7,6 @@ public enum ObjectId
 	Block(),
 	Enemy(),
 	Walker(),
-	Gate();
+	Gate(),
+	PowerUp();
 }

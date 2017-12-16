@@ -112,10 +112,17 @@ public class GameManager implements GameManagerInterface {
 			{
 				//System.out.println("UPDATE");
 				if(c ==0) { //left
-					tempObject.setVelX(-5);
+					if(((Player)tempObject).getIncrementSpeed())
+						tempObject.setVelX(-10);
+					else
+						tempObject.setVelX(-5);
+					
 				}
 				if(c == 1) { //right 
-					tempObject.setVelX(5);
+					if(((Player)tempObject).getIncrementSpeed())
+						tempObject.setVelX(10);
+					else
+						tempObject.setVelX(5);
 					//System.out.println("UPDATE_RIGHT");
 				}
 				
@@ -316,8 +323,34 @@ public class GameManager implements GameManagerInterface {
 	}
 	public SoundManager getSFX(int i) {
 		return SoundManager.SFX[i];
+
+	public boolean isShield() {
+		for(int i = 0; i < handler.object.size(); i++) 
+		{
+			GameObject tempObject = handler.object.get(i);
+		
+			if(tempObject.getId() == ObjectId.Player)
+			{
+				if ( ((Player)tempObject).isShield() )
+					return true;
+			}
+		}
+		return false;
 	}
 	public int getSFXLength() {
 		return SoundManager.SFX.length;
+	public int getShieldUse() {
+		int shieldUse= 0;
+		for(int i = 0; i < handler.object.size(); i++) 
+		{
+			GameObject tempObject = handler.object.get(i);
+		
+			if(tempObject.getId() == ObjectId.Player)
+			{
+				shieldUse = ((Player)tempObject).getShieldUse();
+					
+			}
+		}
+		return shieldUse;
 	}
 }

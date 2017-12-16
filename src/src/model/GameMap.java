@@ -156,9 +156,15 @@ public class GameMap {
 			else if(tempObject.getId() == ObjectId.Enemy)
 			{
 				if(((Enemy)tempObject).getRemove())
+				if(((Player)tempObject).getDecrementShield())
 				{
 					removeObject(tempObject);		
+					
+					((Player)tempObject).setDecrementShield(false);
+					((Player)tempObject).decrementShield();
 				}
+				
+				
 			}
 			
 			}

@@ -27,6 +27,11 @@ public class Player extends GameObject {
     private boolean restart;
     private boolean continueGame;
     private boolean decrementHealth;
+    private boolean decrementShield;
+    private boolean incrementHealth;
+    private boolean incrementSpeed;
+    private boolean shield;
+    private int shieldUse;
     private boolean isEasy;
 	Texture tex;
 	
@@ -39,6 +44,11 @@ public class Player extends GameObject {
 		health = 5;
 		numberOfDeaths = 0;
 		decrementHealth = false;
+		decrementShield = false;
+		incrementHealth = false;
+		incrementSpeed = false;
+		shield = false;
+		shieldUse = 0;
 		isEasy = true;
 	}
 	public boolean IsEasy()
@@ -111,16 +121,55 @@ public class Player extends GameObject {
 	public boolean getDecrementHealth() {
 		return decrementHealth;
 	}
+	public boolean getDecrementShield() {
+		return decrementShield;
+	}
+	public boolean getIncrementHealth() {
+		return incrementHealth;
+	}
+	
+	public boolean getIncrementSpeed() {
+		return incrementSpeed;
+	}
+	
+	public boolean isShield() {
+		return shield;
+	}
+	public void setShield(boolean b) {
+		shield = b;
+	}
+	
+	public int getShieldUse() {
+		return shieldUse;
+	}
 	
 	public void setDecrementHealth(boolean b)
 	{
 		decrementHealth = b;
 	}
-	
+	public void setIncrementHealth(boolean b)
+	{
+		incrementHealth = b;
+	}
+	public void setDecrementShield(boolean b)
+	{
+		decrementShield = b;
+	}
 	public void decrementHealth()
 	{
 		health--;
 	}
+	
+	public void incrementHealth()
+	{
+		health++;
+	}
+	public void decrementShield()
+	{
+		shieldUse--;
+	}
+	
+	
 	
 	public void incrementNumberOfDeaths()
 	{
@@ -211,14 +260,40 @@ public class Player extends GameObject {
 				} 
 				// Collision with the enemy on any side
 				else if (tempObject.getId() == ObjectId.Enemy) {
-					if (getBounds().intersects(tempObject.getBounds())){
+					if (getBounds().intersects(tempObject.getBounds()) && !shield){
+						//health--;
+						//numberOfDeaths++;
 						decrementHealth= true;
 			     	    if (health > 0)
 			     	    {
 			     	    	continueGame = true;
 			     	    	restart = false;
 			     	    }
-			     	       	
+			     	       
+						 	
+					}
+					else if (getBounds().intersects(tempObject.getBounds()) && shield){
+						object.remove(tempObject);
+						decrementShield = true;
+						
+						if (shieldUse <= 0)
+							shield = false;
+					}
+				}
+				// Collision with powerup
+				else if (tempObject.getId() == ObjectId.PowerUp) {
+					if(getBounds().intersects(tempObject.getBounds()) && ((PowerUp)tempObject).getType() == 0) {
+						object.remove(tempObject);
+						incrementHealth = true;
+					}
+					else if(getBounds().intersects(tempObject.getBounds()) && ((PowerUp)tempObject).getType() == 1) {
+						object.remove(tempObject);
+						incrementSpeed = true;
+					}
+					else if(getBounds().intersects(tempObject.getBounds()) && ((PowerUp)tempObject).getType() == 2) {
+						object.remove(tempObject);
+						shield =true;
+						shieldUse = 3;
 					}
 				}
 			
