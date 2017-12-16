@@ -4,19 +4,17 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
-import framework.GameObject;
-import framework.ObjectId;
-import framework.Texture;
+import controller.Texture;
 
 public class Patroller extends Enemy {
 
 	Texture tex;
-	
-	public Patroller(float x, float y, int maxHealth, ObjectId id, ColorId color) { 
+
+	public Patroller(float x, float y, int maxHealth, ObjectId id, ColorId color) {
 		super(x, y, maxHealth, id, color);
 		tex = GameMap.getInstance();
 		velX = 2;
-		// remove = false;
+		remove = false;
 
 	}
 
@@ -41,7 +39,6 @@ public class Patroller extends Enemy {
 		returnOnLedge();
 
 		if (this.isDead())
-			// handler.removeObject(this);
 			remove = true;
 
 	}
@@ -117,7 +114,6 @@ public class Patroller extends Enemy {
 		if (this.color == ColorId.Blue) {
 			if (velX < 0)
 				g.drawImage(tex.patroller[0], (int) x, (int) y, null);
-			// System.out.println("Patroller Blue");
 			else
 				g.drawImage(tex.patroller[1], (int) x, (int) y, null);
 		}

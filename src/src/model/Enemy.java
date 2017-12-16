@@ -1,8 +1,5 @@
 package model;
 
-import framework.GameObject;
-import framework.ObjectId;
-
 public abstract class Enemy extends GameObject {
 
 	private int health;

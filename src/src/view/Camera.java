@@ -1,26 +1,24 @@
 package view;
 
-import framework.GameObject;
+import model.GameObject;
 
-public class Camera  {
-	
+public class Camera {
+
 	private float x, y;
-	
-	public Camera(float x, float y)
-	{
+
+	public Camera(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public void tick(GameObject player)
-	{
-		if(player.getX() < GamePanel.WIDTH / 2)
+
+	public void tick(GameObject player) {
+		if (player.getX() < GamePanel.WIDTH / 2)
 			x = 0;
-		else if (player.getX() > GamePanel.levelWidth - GamePanel.WIDTH/2 )
+		else if (player.getX() > GamePanel.levelWidth - GamePanel.WIDTH / 2)
 			x = -GamePanel.levelWidth + GamePanel.WIDTH;
 		else
-			x = - player.getX() + GamePanel.WIDTH / 2;
-		
+			x = -player.getX() + GamePanel.WIDTH / 2;
+
 	}
 
 	public float getX() {
@@ -38,7 +36,4 @@ public class Camera  {
 	public void setY(float y) {
 		this.y = y;
 	}
-	
-	
-
 }
