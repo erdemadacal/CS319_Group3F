@@ -321,4 +321,3 @@ public class GameManager implements GameManagerInterface {
 		return SoundManager.SFX.length;
 	}
 }
-}
