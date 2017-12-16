@@ -306,28 +306,9 @@ public class GameManager implements GameManagerInterface {
 		view.showGamePanel(false);
 		System.out.println("STOP GAME");
 	}
-	public void startSelectionEffect() {
-		SoundManager.SELECT.play();
-	}
-	public void startBackgroundLoop() {
-		SoundManager.BACK.loop();
-	}
-	public void stopBackgroundLoop() {
-		SoundManager.BACK.stop();
-	}
-	public void setVolume(Float f) {
-		SoundManager.BACK.setVolume(f);
-	}
-	public void setMinimumVolume() {
-		SoundManager.BACK.setMinimum();
-	}
-	public void setMaximumVolume() {
-		SoundManager.BACK.setMaximum();
-	}
-	public SoundManager getSFX(int i) {
-		return SoundManager.SFX[i];
-	}
-	public int getSFXLength() {
-		return SoundManager.SFX.length;
-	}
+	
+	
+	
+	
+	
 }
