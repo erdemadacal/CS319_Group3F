@@ -108,6 +108,10 @@ public class GameMap {
 						((Player) tempObject).setReachGoal(false);
 						changeLevel = true;
 					}
+					if (((Player) tempObject).getIncrementHealth()) {
+						((Player) tempObject).setIncrementHealth(false);
+						((Player) tempObject).incrementHealth();
+					}
 					if (((Player) tempObject).getDecrementHealth()) {
 						((Player) tempObject).setDecrementHealth(false);
 						((Player) tempObject).decrementHealth();

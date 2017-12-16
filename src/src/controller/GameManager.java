@@ -3,8 +3,11 @@ package controller;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URL;
+
 import model.Bullet;
 import model.ColorId;
 import model.GameObject;
@@ -18,6 +21,8 @@ public class GameManager implements GameManagerInterface {
 	private MainMenuView view;
 	private GameStateManager handler;
 	public static boolean isEasy;
+	private URL url;
+	private File file;
 	
 	public GameManager(MainMenuView view, Camera cam)
 	{
@@ -54,7 +59,6 @@ public class GameManager implements GameManagerInterface {
 		{
 			view.displayLevelPanel(1); 
 			handler.loadLevel(true);
-			System.out.println("CHANGE VIEW");
 		}
 		else if (i == 1)
 			view.displayChangeSettingsPanel();
@@ -72,7 +76,6 @@ public class GameManager implements GameManagerInterface {
 		{
 			String str = ""; 
 			str = loadGame();
-			System.out.println("LEVELLL" + str);
 			int level;
 			level = Integer.parseInt(str);
 			view.displayLevelPanel(level);
@@ -161,9 +164,15 @@ public class GameManager implements GameManagerInterface {
 	public void saveGame() 
 	{
 		try {
-	        PrintWriter writer = new PrintWriter("level.txt", "UTF-8");
+			url = getClass().getResource("/level.txt");
+			file = new File(url.getPath());
+		    PrintWriter writer = new PrintWriter(file,"UTF-8");
+		    // now do something
+		    System.out.println("girdim");
 	        String strCurrentLevel = "" + handler.getLevel();
+	        System.out.println(handler.getLevel());
 	        String noOfDeaths = "" + handler.getNumberOfDeaths();
+	        System.out.println(handler.getNumberOfDeaths());
 	        String health = "" + handler.getPlayerHealth();
 	        String easy = "";
 	        if(isEasy)
@@ -171,8 +180,8 @@ public class GameManager implements GameManagerInterface {
 	        else 
 	        	easy = "" + 0;
 	        
-	        writer.println(strCurrentLevel); 
-	        writer.println(noOfDeaths); 
+	        writer.println(strCurrentLevel);
+	        writer.println(noOfDeaths);
 	        writer.println(health);
 	        writer.println(easy);
 	        writer.close();
@@ -196,31 +205,27 @@ public class GameManager implements GameManagerInterface {
         int counter = 0;
         
 		try{	
-			reader = new BufferedReader(new FileReader("level.txt"));	
+			reader = new BufferedReader(new InputStreamReader(
+                    this.getClass().getResourceAsStream("/level.txt")));	
 		    line = reader.readLine();
 		    counter ++;
 		    while (line != null) 
 		    {
-		      System.out.println("LEVEL IN WHILE" + line);
 		      if(counter == 1)
 		      {
 		    	  level = line;
-		    	  System.out.println("LEVEL IN IF" + level);
 		      }
 		      if(counter == 2)
 		      {
 		    	  noOfDeaths = line; 
-		    	  System.out.println("DEATH IN IF" + noOfDeaths);
 		      }
 		      if(counter == 3)
 		      {
 		    	  health = line; 
-		    	  System.out.println("HEALTH IN IF" + health);
 		      } 
 		      if(counter == 4)
 		      {
 		    	  easy = line; 
-		    	  System.out.println("Easy IN IF" + isEasy);
 		      }
 		      line = reader.readLine();	  
 		      counter ++;
@@ -235,13 +240,11 @@ public class GameManager implements GameManagerInterface {
 		{
 			intDeath = Integer.parseInt(noOfDeaths);
 			handler.setNumberOfDeaths(intDeath);
-			System.out.println("DEATH : " + intDeath);
 		}	
 		if(!health.equals("-1"))
 		{
 			intHealth = Integer.parseInt(health);
 			handler.setPlayerHealth(intHealth);
-			System.out.println("HEALTH : " + intHealth);
 		}
 		if(!easy.equals("-1"))
 		{
@@ -250,7 +253,6 @@ public class GameManager implements GameManagerInterface {
 				isEasy = false;
 			else 
 				isEasy = true;
-			System.out.println("HEALTH : " + intHealth);
 		}
 		
 		
@@ -289,7 +291,6 @@ public class GameManager implements GameManagerInterface {
 	{
 		handler.clearLevel();
 		view.showGamePanel(false);
-		System.out.println("STOP GAME");
 	}
 	public void startSelectionEffect() {
 		SoundManager.SELECT.play();
