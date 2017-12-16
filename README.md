@@ -15,4 +15,4 @@ game environment. Bullets will only be able to harm enemies that posses the same
 contain  power-ups such as med-kits, increase bullet power, speed-up etc. The enemies will have different behaviours
 (eg. simply walk left-right, shoot if the player is in the direction it is facing, constantly jump while moving etc.).
 
-![alt text](https://media.giphy.com/media/3o6fIUcDTI63Fgh5sc/giphy.gif)
+<img src="https://i.imgflip.com/216ps2.gif"/>
