@@ -15,7 +15,7 @@ import view.GamePanel;
 
 public class Block extends GameObject {
 
-	Texture tex = GamePanel.getInstance();
+	Texture tex; 
 	
 	private int type; 
 	private double alpha = 255;
@@ -27,6 +27,7 @@ public class Block extends GameObject {
 	public Block(float x, float y, int type, ObjectId id, ColorId color, Handler handler) {
 		super(x, y, id, color);
 		this.handler = handler;
+		tex = GameMap.getInstance();
 		//remove = false;
 		this.type = type;
 		this.image = new BufferedImage(tex.block[type].getWidth(),tex.block[type].getHeight(), BufferedImage.TYPE_INT_ARGB);

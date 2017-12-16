@@ -1,16 +1,17 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import framework.GameManager;
 import framework.ObjectId;
-import framework.Sound;
 import framework.Texture;
 import view.BufferedImageLoader;
 
@@ -21,59 +22,60 @@ public class GamePanel extends JPanel {
 
 	public static int WIDTH = 1024, HEIGHT = 768;
 	
-	public BufferedImage level = null, background = null, level2 = null, heart = null;
-	//public static BufferedImage[] levels = new BufferedImage[5];
+	private BufferedImage level1 = null, background = null, level2 = null;
+	private BufferedImage heart = null, colorRed = null, colorBlue = null, colorGreen = null;
 	
 	public static int levelWidth;
-	public static boolean isEasy = true;
-	// Object
-	Camera cam;
-	static Texture tex;
-	
-	Random rand = new Random();
-	
-	public static int LEVEL = 1;
+
+	private Camera cam;
 	private GameManager gm;
+	
+	private Font font;
+	private JButton returnButton;
+	
+	private boolean gameOver ;
+	private int death;
 	
 	public GamePanel(MainMenuView view)
 	{
 		cam = new Camera(0,0);
 		gm = new GameManager(view,cam);
+		
+		gameOver = false;
+		death = 0;
+		
+		font = new Font("Verdana",Font.BOLD,40);
+		
+		returnButton= new JButton("Back");
+		returnButton.setBackground(Color.BLUE);
+		returnButton.setFont(font);
+		returnButton.setVisible(false);
+		add(returnButton);
+		
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		//setBackground(Color.WHITE);
 		setFocusable(true);
 		requestFocus();
 	}
 	public void init() 
 	{
-		//WIDTH = getWidth();
-		//HEIGHT = getHeight();
-		
-		tex = new Texture();
 		BufferedImageLoader loader = new BufferedImageLoader();
-		level = loader.loadImage("/level1.png");			// loading level
+		level1 = loader.loadImage("/level1.png");			// loading level
 		level2 = loader.loadImage("/level2.png");
 		background = loader.loadImage("/BackGround.jpg");	// loading background
 		heart = loader.loadImage("/Heart.png");
-		
+		colorBlue = loader.loadImage("/Bullet_Blue.gif");
+		colorRed = loader.loadImage("/Bullet_Red.gif");
+		colorGreen = loader.loadImage("/Bullet_Green.gif");
 		this.cam = new Camera(0,0);
 		
-		//levels[0] = level;
-		//levels[1] = level2;
-		
-		gm.loadImageLevel(level);
+		gm.loadImageLevel(level1);
 
-		//handler.addObject(new Player(100, 100, handler, ObjectId.Player));
-		//handler.createLevel();
-		
-		//this.addKeyListener(new KeyInput(handler));
 	}
 	
 	public void tick()
 	{
-		//System.out.println("TICK");
 		levelWidth = getLevelWidth();
 		gm.tick();
 		for(int i = 0; i < gm.getHandler().object.size(); i++) {
@@ -82,29 +84,72 @@ public class GamePanel extends JPanel {
 		}
 	}
 	
+	public JButton getReturnButton()
+	{
+		return returnButton;
+	}
+	
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		Font newFont = new Font("Verdana",Font.BOLD,45);
 		
 		// create graphics2d object from graphics g
 		Graphics2D g2d = (Graphics2D) g;
 		
-		
 		g.drawImage(background, (int)cam.getX(), (int)cam.getY(), null);
 		for(int i=0 ; i < gm.getPlayerHealth(); i ++)
 			g.drawImage(heart, 50 + (45* i), 50, null);
-		
+	
+        if(gm.getPlayerHealth()  == 0)
+        { 
+            	gameOver = true;
+            	death = gm.getNumberOfDeaths();
+        }
+        
+        if(!gameOver)
+		{
+			newFont = new Font("Verdana",Font.BOLD,30); 
+			g.setFont(newFont);
+			g.setColor(Color.BLUE);
+			g.drawString("Z-", 320, 60);
+			g.drawImage(colorBlue, 360, 45, null);
+			g.setColor(Color.RED);
+			g.drawString("X-", 390, 60);
+			g.drawImage(colorRed, 430, 45, null);
+			g.setColor(Color.GREEN);
+			g.drawString("C-", 460, 60);
+			g.drawImage(colorGreen, 500, 45, null);
+			
+		}
+        
+        if(gameOver)
+        {
+        	g.setFont(newFont);
+	 	    g.setColor(Color.orange);
+        	g.drawString("GAME OVER !", 345, 250);
+        	g.drawString("You lost with " + death + " number of deaths.", 90, 400);  
+        	returnButton.setLocation(400, 450);
+    		returnButton.setSize(200, 50);
+        	returnButton.setVisible(true);
+        	gm.stopGame();
+
+        }
 		g2d.translate(cam.getX(), cam.getY()); // begin of camera
 		gm.render(g);
 		g2d.translate(-cam.getX(), -cam.getY()); // end of camera
-		//System.out.println("CAM X " + (int)cam.getX() + "CAM Y " + (int)cam.getY());
-		///////////////////////////////////////
-		g.dispose();
+		
+		if(!gameOver)
+			g.dispose();
 		
 		
 	}
-	
+	public void setGameOver(boolean b)
+	{
+		gameOver = b;
+	}
 	private int getLevelWidth() {
-		switch(LEVEL)
+		switch(gm.getLevel())
 		{
 			case 1:
 				return 43 * 32;
@@ -116,21 +161,11 @@ public class GamePanel extends JPanel {
 		
 	}
 	
-	public void setLevel(int level)
-	{
-		LEVEL = level; 
-	}
-	
-	public static Texture getInstance() {
-		return tex;
-	}
-	
 	public Camera getCamera() {
 		return cam;
 	}
 	public GameManager getGameManager() {
 		return gm;
 	}
-	
-	
+
 }

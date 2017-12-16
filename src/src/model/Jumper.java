@@ -16,10 +16,11 @@ public class Jumper extends Enemy {
 	
 	private Handler handler;
 	
-	Texture tex = GamePanel.getInstance();
+	Texture tex;
 	
 	public Jumper(float x, float y, int maxHealth, ObjectId id, ColorId color, Handler handler) {// 
 		super(x, y, maxHealth, id, color);
+		tex = GameMap.getInstance();
 		//this.handler = handler;
 		velX = 2;
 		//remove = false;

@@ -5,17 +5,34 @@ import java.util.LinkedList;
 
 import framework.GameObject;
 import framework.ObjectId;
+import framework.Texture;
 
 public class GameMap {
 	
 	private GameObject tempObject;
-	private boolean changeLevel = false;
-	private boolean  restart = false;
-	public LinkedList<GameObject> object = new LinkedList<GameObject>();
+	private boolean changeLevel;
+	private boolean  restart;
+	private boolean continueGame;
+	public LinkedList<GameObject> object; 
+	private static Texture tex;
 	
-	public LinkedList<GameObject> getObject() {
-	return object;
-}
+	public GameMap()
+	{
+		object = new LinkedList<GameObject>();
+		tex = new Texture();
+		changeLevel = false;
+		restart = false;
+		continueGame = false;
+	}
+	public LinkedList<GameObject> getObject() 
+	{
+		return object;
+    }
+
+	public static Texture getInstance() 
+	{
+		return tex;
+	}
 	
 	public void addObject(GameObject object) {
 		this.object.add(object);
@@ -27,7 +44,7 @@ public class GameMap {
 	
 	public int getPlayerHealth()
 	{
-		int playerHealth = -1;
+		int playerHealth = -1; // not valid
 		for(int i = 0; i < object.size(); i++) 
 		{
 			GameObject tempObject = object.get(i);
@@ -40,6 +57,22 @@ public class GameMap {
 		return playerHealth;
 		
 	}
+	public int getNumberOfDeaths()
+	{
+		int numberOfDeaths = -1; // not valid
+		for(int i = 0; i < object.size(); i++) 
+		{
+			GameObject tempObject = object.get(i);
+			
+			if(tempObject.getId() == ObjectId.Player)
+			{
+				numberOfDeaths = ((Player)tempObject).getNumberOfDeaths();	
+			}
+		}
+		return numberOfDeaths;
+		
+	}
+	
 	public void setPlayerHealth(int health)
 	{
 		//int playerHealth = -1;
@@ -54,6 +87,19 @@ public class GameMap {
 		}
 		
 	}
+	public void setNumberOfDeaths(int death)
+	{
+		for(int i = 0; i < object.size(); i++) 
+		{
+			GameObject tempObject = object.get(i);
+			
+			if(tempObject.getId() == ObjectId.Player)
+			{
+				((Player)tempObject).setNumberOfDeaths(death);	
+			}
+		}
+		
+	}
 	
 	public void tick() {
 		for(int i = 0; i < object.size(); i++)
@@ -61,19 +107,32 @@ public class GameMap {
 			tempObject = object.get(i);
 			tempObject.tick(object);
 			
-			/*if(tempObject.getId() == ObjectId.Player)
+			if(tempObject.getId() == ObjectId.Player)
 			{
-				/*if(((Player)tempObject).isReachGoal())
-				{
-					((Player)tempObject).setReachGoal(false);
-					changeLevel = true;			
-				}*/
-				/*if(((Player)tempObject).getRestart())
+				if(((Player)tempObject).getRestart())
 				{
 					((Player)tempObject).setRestart(false);
 					 restart = true;			
 				}
-			}*/
+				if(((Player)tempObject).getContinueGame())
+				{
+					((Player)tempObject).setContinueGame(false);
+					 continueGame = true;			
+				}
+				if(((Player)tempObject).isReachGoal())
+				{
+					((Player)tempObject).setReachGoal(false);
+					changeLevel = true;			
+				}
+				if(((Player)tempObject).getDecrementHealth())
+				{
+					((Player)tempObject).setDecrementHealth(false);
+					((Player)tempObject).decrementHealth();
+					((Player)tempObject).incrementNumberOfDeaths();
+				}
+				
+				
+			}
 			/*else if(tempObject.getId() == ObjectId.Bullet)
 			{
 				if(((Bullet)tempObject).getRemove())
@@ -103,16 +162,25 @@ public class GameMap {
 	public boolean isChangeLevel() {
 		return changeLevel;
 	}
-	/*public boolean getRestart() {
+	
+	public void setChangeLevel(boolean changeLevel) {
+		this.changeLevel = changeLevel;
+	}
+	
+	public boolean getRestart() {
 		return restart;
 	}
     public void setRestart(boolean b) {
 		restart = b;
 	}
-     */
-	public void setChangeLevel(boolean changeLevel) {
-		this.changeLevel = changeLevel;
+  
+    
+    public boolean getContinueGame() {
+		return continueGame;
 	}
+    public void setContinueGame(boolean b) {
+		continueGame = b;
+	}	
 
 	public void render(Graphics g)
 	{

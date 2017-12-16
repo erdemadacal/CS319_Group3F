@@ -26,12 +26,12 @@ public class Handler
 	
 	private BufferedImage level1 = null, level2 = null, level3 = null, level4 = null, level5 = null;
 	public LinkedList<GameObject> object;
-	//private int currentLevel;
+	private int currentLevel;
 	public Handler(Camera cam) {
 		this.cam = cam;
 		map = new GameMap();
 		object = map.getObject();
-		
+		currentLevel = 1;
 		BufferedImageLoader loader = new BufferedImageLoader();
 		level1 = loader.loadImage("/level1.png");			// loading level
 		level3 = loader.loadImage("/level2.png");
@@ -43,6 +43,14 @@ public class Handler
 		//currentLevel = 1;
 	}
 	
+	public int getLevel()
+	{
+		return currentLevel;
+	}
+	public void setLevel(int level)
+	{
+		currentLevel = level;
+	}
 	
 	public void tick() {
 		map.tick();
@@ -50,11 +58,16 @@ public class Handler
 			map.setChangeLevel(false);
 			switchLevel();
 	    }
-		/*if(map.getRestart())
+		if(map.getRestart())
 		{
-			loadLevel();
+			loadLevel(true);
 			map.setRestart(false);
-		}*/
+		}
+		if(map.getContinueGame())
+		{
+			loadLevel(false);
+			map.setContinueGame(false);
+		}
 		
 	}
 	
@@ -147,41 +160,50 @@ public class Handler
 	*/
 	public void switchLevel() {
 		int playerHealth = map.getPlayerHealth();
+		int playernumberOfDeaths = map.getNumberOfDeaths();
 		clearLevel();
 		cam.setX(0);
 		
-		switch(GamePanel.LEVEL)
+		switch(currentLevel)
 		{
 		  case 1:
 			    loadImageLevel(level2);
-			    GamePanel.LEVEL++;
+			    currentLevel++;
 			  //  currentLevel++;
 			    break;
 		  case 2:
 				loadImageLevel(level3);
-				GamePanel.LEVEL++;
+				currentLevel++;
+				//GamePanel.LEVEL++;
 				//currentLevel++;
 				break;
 		  case 3:
 			    loadImageLevel(level4);
-				GamePanel.LEVEL++;
+			    currentLevel++;//GamePanel.LEVEL++;
 				//currentLevel++;
 				break;
 		  case 4:
 			    loadImageLevel(level5);
-			    GamePanel.LEVEL++;
+			    currentLevel++;//GamePanel.LEVEL++;
 			    //currentLevel++;
 			    break;
 		}
 		map.setPlayerHealth(playerHealth);
-		
+		map.setNumberOfDeaths(playernumberOfDeaths);
 	}
-	public void loadLevel() {
-		int playerHealth = map.getPlayerHealth();
+	public void loadLevel(boolean newGame) {
+		int playerHealth = 5;
+		int playernumberOfDeaths = 0;
+		if(!newGame)
+		{
+			playerHealth = map.getPlayerHealth();
+			playernumberOfDeaths = map.getNumberOfDeaths();
+		}
+		
 		clearLevel();
 		cam.setX(0);
 		//System.out.println("RESTART");
-		switch(GamePanel.LEVEL)
+		switch(currentLevel)//GamePanel.LEVEL)
 		{
 		  case 1:
 			    loadImageLevel(level1);
@@ -200,11 +222,15 @@ public class Handler
 				break;
 		
 		}
-		map.setPlayerHealth(playerHealth);
-		
+		System.out.println(map.getPlayerHealth());
+		if(!newGame)
+		{
+			map.setPlayerHealth(playerHealth);
+			map.setNumberOfDeaths(playernumberOfDeaths);
+		}
 	}
 	
-	private void clearLevel() {
+	public void clearLevel() {
 		object.clear();
 	}
 	
@@ -220,6 +246,20 @@ public class Handler
 	{
 		return map.getPlayerHealth();
 	}
+	
+	public int getNumberOfDeaths()
+	{
+		return map.getNumberOfDeaths();
+	}
+	public void setNumberOfDeaths(int death)
+	{
+		map.setNumberOfDeaths(death);
+	}
+	public void setPlayerHealth(int health)
+	{
+		map.setPlayerHealth(health);
+	}
+	
 	/*public void createLevel()
 	{
 		for (int xx = 0; xx < Game.WIDTH * 2; xx +=32)

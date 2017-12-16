@@ -19,10 +19,11 @@ public class Floater extends Enemy {
 	private int range = 5;
 	private float initialX, finalX;
 	
-	Texture tex = GamePanel.getInstance();
+	Texture tex;
 	
 	public Floater(float x, float y, int maxHealth, ObjectId id, ColorId color, Handler handler) {
 		super(x, y, maxHealth, id, color);
+		tex = GameMap.getInstance();
 		this.handler = handler;
 		velX = 2;
 		initialX = x;

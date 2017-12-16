@@ -15,6 +15,20 @@ public abstract class GameObject
 	protected boolean jumping = false;
 	protected int facing = 1;
 
+
+
+	public GameObject(float x, float y, ObjectId id, ColorId color)
+	{
+		this.x = x;
+		this.y = y;
+		this.id = id;
+		this.color = color;
+		
+	}
+	
+	public abstract void tick(LinkedList<GameObject> object);
+	public abstract void render(Graphics g);
+	public abstract Rectangle getBounds();
 	
 	public boolean isFalling() {
 		return falling;
@@ -31,19 +45,6 @@ public abstract class GameObject
 	public void setJumping(boolean jumping) {
 		this.jumping = jumping;
 	}
-
-	public GameObject(float x, float y, ObjectId id, ColorId color)
-	{
-		this.x = x;
-		this.y = y;
-		this.id = id;
-		this.color = color;
-		
-	}
-	
-	public abstract void tick(LinkedList<GameObject> object);
-	public abstract void render(Graphics g);
-	public abstract Rectangle getBounds();
 	
 	public float getX() {
 		return x;

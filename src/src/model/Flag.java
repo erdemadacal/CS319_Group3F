@@ -13,11 +13,11 @@ import view.GamePanel;
 public class Flag extends GameObject {
 
 	private BufferedImage img = null;
-	Texture tex = GamePanel.getInstance();
+	Texture tex; 
 
 	public Flag(float x, float y, ObjectId id) {
 		super(x, y, id, ColorId.Black);
-
+		tex = GameMap.getInstance();
 	}
 
 

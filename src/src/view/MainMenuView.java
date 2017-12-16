@@ -1,7 +1,5 @@
 package view;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +14,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import framework.GameManager;
-import framework.Sound;
 
 
 public class MainMenuView implements  Runnable, KeyListener{
@@ -51,13 +48,10 @@ public class MainMenuView implements  Runnable, KeyListener{
 		
 	    gameFrame = new JFrame("Color Shooter: The Spectrum Adventurer");
         
-		// create cards
 	    gamePanel = new GamePanel(this);
 		gamePanel.init();
-		//Handler handler = gamePanel.getHandler();
-		//Camera cam = gamePanel.getCamera();
 	    
-		mainMenuP = new MainMenuPanel();//cam);
+		mainMenuP = new MainMenuPanel();
 		creditsP = new CreditsPanel();
 		changeSettingsP = new ChangeSettingsPanel();
 		pauseMenuP = new PauseMenuPanel();
@@ -66,12 +60,13 @@ public class MainMenuView implements  Runnable, KeyListener{
 		
 		gm = gamePanel.getGameManager();
 		
+		// create cards
 		cards = new JPanel();
 		cardLayout = new CardLayout();
 
 		cards.setLayout(cardLayout);
 		
-
+        //set Listeners to buttons
 		listener = new MenuListener();
 		mainMenuP.getNewGameButton().addActionListener(listener);
 		mainMenuP.getContinueGameButton().addActionListener(listener);
@@ -80,6 +75,7 @@ public class MainMenuView implements  Runnable, KeyListener{
 		mainMenuP.getCreditsButton().addActionListener(listener);
 		mainMenuP.getExitButton().addActionListener(listener);
 
+		gamePanel.getReturnButton().addActionListener(listener);
 		creditsP.getReturnButton().addActionListener(listener);
 		changeSettingsP.getReturnButton().addActionListener(listener);
 		changeSettingsP.getSFX().addChangeListener(listener);
@@ -112,18 +108,6 @@ public class MainMenuView implements  Runnable, KeyListener{
 		helpP.addKeyListener(this);
 		pauseMenuP.addKeyListener(this);
 		
-		//KeyInput keyListener = new KeyInput(handler);
-		/*gameFrame.addKeyListener(keyListener);
-		cards.addKeyListener(keyListener);
-		gamePanel.addKeyListener(keyListener);
-		mainMenuP.addKeyListener(keyListener);
-		creditsP.addKeyListener(keyListener);
-        changeSettingsP.addKeyListener(keyListener);
-		helpP.addKeyListener(keyListener);
-		pauseMenuP.addKeyListener(keyListener);
-		*/
-		
-		
 		gameFrame.pack();
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameFrame.getContentPane().add(cards);
@@ -132,9 +116,16 @@ public class MainMenuView implements  Runnable, KeyListener{
 		gameFrame.setLocationRelativeTo(null);
 		gameFrame.setVisible(true);
 		
-		showGamePanel = false;
+		showGamePanel = false; //initally it is set to false as it is not shown
 	}
 	
+	public void showGamePanel(boolean showGamePanel)
+	{
+		this.showGamePanel = showGamePanel;
+	}
+	
+	// display methods are called by the controller, game manager
+	// as it decides on what to do next according to the user inputs
 	public void displayMenuPanel() {
 		cardLayout.show(cards, "1");
 		showGamePanel = false;
@@ -150,9 +141,8 @@ public class MainMenuView implements  Runnable, KeyListener{
 		showGamePanel = false;
 	}
 	public void displayLevelPanel(int level) {
-		//gamePanel.init();
 		if(level != 0)
-		   gamePanel.setLevel(level);
+		   gm.setLevel(level);
 		cardLayout.show(cards, "6");
 		showGamePanel = true;
 	}
@@ -171,6 +161,7 @@ public class MainMenuView implements  Runnable, KeyListener{
 		showGamePanel = false;
 	}
 	
+	//warn the controller when there is user input
 	public void keyPressed(KeyEvent e) {
 
 		int c = e.getKeyCode();
@@ -191,15 +182,17 @@ public class MainMenuView implements  Runnable, KeyListener{
     		   //System.out.println("UP");
 				gm.updateLevelView(2);
     	   }
-    	   else if(c == KeyEvent.VK_SPACE)
+    	  /* else if(c == KeyEvent.VK_SPACE)
     	   {
     		   //System.out.println("SHOOTING");
     		   gm.updateLevelView(3);
-    	   }
+    	   }*/
     	   else if(c == KeyEvent.VK_P)
     	   {
-    		   //System.out.println("PauseGame");
-    		   gm.changeView(5);
+    		   boolean inPauseMenu = false;
+    		   if(inPauseMenu)
+    		   gm.changeView(8);
+    		   else gm.changeView(5);   
     	   }
     	    // Change player's color based on use input
 			// Z for Blue, X for Red, C for Green
@@ -213,19 +206,20 @@ public class MainMenuView implements  Runnable, KeyListener{
 				gm.updateLevelView(6);
 			}
 			
-			// Restart level
-			if(c == KeyEvent.VK_R) {
+			// Restart level//for test purpose
+			/*if(c == KeyEvent.VK_R) {
 				gm.restartLevel();
 			}
 			// Next Level. For testing purposes only
 			if(c == KeyEvent.VK_PAGE_UP) {
 				gm.switchLevel();
 			}
+			*/
 			
        	}
+       else
 		if(c == KeyEvent.VK_ESCAPE)
 		{
-			//System.out.println("BYE!");
 			gm.updateLevelView(7);
 		}
 		
@@ -238,14 +232,19 @@ public class MainMenuView implements  Runnable, KeyListener{
 	       {
 	    	   if(c == KeyEvent.VK_LEFT)
 	    	   {
-	    		   //System.out.println("LEFT");
 	    		   gm.stopPlayer(0);
 	    	   }
 	    	   else if(c == KeyEvent.VK_RIGHT)
 	    	   {
-	    		   //System.out.println("RIGHT");
 	    		   gm.stopPlayer(1);
 	    	   }
+	    	   else if(c == KeyEvent.VK_SPACE)
+	    	   {
+	    		   //System.out.println("SHOOTING");
+	    		   gm.updateLevelView(3);
+	    	   }
+	    	   
+	    	   //for test purposes
 	    	  /* else if(c == KeyEvent.VK_UP)
 	    	   {
 	    		  // System.out.println("UP");
@@ -285,9 +284,9 @@ public class MainMenuView implements  Runnable, KeyListener{
 		}
 		System.exit(1);
 	}
+	// game loop
 	public void run() 
 	{
-		//gamePanel.init();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
@@ -317,25 +316,9 @@ public class MainMenuView implements  Runnable, KeyListener{
 		stop();
 	}
 	
+	// start the game
 	public static void main(String args[]) {
-		//new Window(800, 600, "GameTutorial", new Game());
-		//System.out.println("MAIN");
-		//GamePanel g = new GamePanel();
-		
-		//g.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		//g.setMaximumSize(new Dimension(WIDTH, HEIGHT));
-		//g.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		
-		/*JFrame frame = new JFrame("GameTutorial");
-		//frame.add(g);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		*/
-		
-		//g.start();
+
 		MainMenuView view = new MainMenuView();
 		view.start();
 	}
@@ -345,121 +328,131 @@ public class MainMenuView implements  Runnable, KeyListener{
 	    gamePanel.repaint();   
 	}
 	
-
+    // private class which implements the listeners
+	// in each action, game manager is called, the input is transmitted
 	public class MenuListener implements ActionListener, ChangeListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 
 			if (mainMenuP.getNewGameButton() == event.getSource()) {
+				gamePanel.setGameOver(false);
 				gm.changeView(6);
-				Sound.SELECT.play();
-				} 
+				gm.startSelectionEffect();
+			} 
 			else if (difficultySelectionPanel.getEasyButton() == event.getSource())
 			{
+				gm.setIsEasy(true);
 				gm.changeView(0);
-				Sound.SELECT.play();
-				Sound.BACK.loop();
+				gm.startSelectionEffect();
+				gm.startBackgroundLoop();
+				
 			}
 			else if (difficultySelectionPanel.getHardButton() == event.getSource())
 			{
+				gm.setIsEasy(false);
 				gm.changeView(0);
-				Sound.SELECT.play();
-				Sound.BACK.loop();
+				gm.startSelectionEffect();
+				gm.startBackgroundLoop();
 			}
 			else if (mainMenuP.getContinueGameButton() == event.getSource()) {
-				gm.changeView(7); // gm levelView
-				Sound.SELECT.play();
-				Sound.BACK.loop();
+				gm.changeView(7);
+				gm.startSelectionEffect();
+				gm.startBackgroundLoop();
 			}
 			else if (mainMenuP.getChangeSettingsButton() == event.getSource()) {
 				gm.changeView(1);
-				Sound.SELECT.play();
+				gm.startSelectionEffect();
 			}
 			else if (mainMenuP.getViewHelpButton() == event.getSource()) {
 				gm.changeView(2);
-				Sound.SELECT.play();
+				gm.startSelectionEffect();
 			} 
 			else if (mainMenuP.getCreditsButton() == event.getSource()) {
-				gm.changeView(3);
-				Sound.SELECT.play();
+				gm.changeView(3);	
+				gm.startSelectionEffect();
 			} 
 			else if (mainMenuP.getExitButton() == event.getSource()) {
 			     gm.updateLevelView(7);
-			     Sound.SELECT.play();
+			     gm.startSelectionEffect();
 			}
 
 			else if (creditsP.getReturnButton() == event.getSource()) {
 				gm.changeView(4);
-				Sound.OPTION.play();
+				gm.startSelectionEffect();
 			} 
 			else if (changeSettingsP.getReturnButton() == event.getSource()) {
 				gm.changeView(4);
-				Sound.OPTION.play();
+				gm.startSelectionEffect();
 			}
 			else if (helpP.getReturnButton() == event.getSource()) {
 				gm.changeView(4);
-				Sound.OPTION.play();
+				gm.startSelectionEffect();
 			}
 			else if(pauseMenuP.getResumeButton() == event.getSource()) {
-				gm.changeView(0);
-				Sound.OPTION.play();
+				gm.changeView(8);
+				gm.startSelectionEffect();
 			}
 			else if(pauseMenuP.getReturnButton()== event.getSource()) {
 				gm.changeView(4);
-				Sound.OPTION.play();
-				Sound.BACK.stop();
+				gm.startSelectionEffect();
+				gm.stopBackgroundLoop();
 			}
 			else if(pauseMenuP.getViewHelpButton() == event.getSource()) {
 				gm.changeView(2);
-				Sound.OPTION.play();
+				gm.startSelectionEffect();
+			}
+			else if(gamePanel.getReturnButton() == event.getSource()) {
+			   gm.changeView(4);
+			   gm.startSelectionEffect();
+			   gm.stopBackgroundLoop();
 			}
 			
 		}
-        @Override
-		public void stateChanged(ChangeEvent e)
-		{
-			int sfxVolume;
-			int musicVolume;
-			JSlider source = (JSlider)e.getSource();
+		   @Override
+			public void stateChanged(ChangeEvent e)
+			{
+				int sfxVolume;
+				int musicVolume;
+				JSlider source = (JSlider)e.getSource();
 
-			if (!source.getValueIsAdjusting()) {
-				if(changeSettingsP.getSFX() == source || pauseMenuP.getSFX() == source  )
-				{
-					sfxVolume = source.getValue();
-					changeSettingsP.getSFX().setValue(sfxVolume);
-					pauseMenuP.getSFX().setValue(sfxVolume);
+				if (!source.getValueIsAdjusting()) {
+					if(changeSettingsP.getSFX() == source || pauseMenuP.getSFX() == source  )
+					{
+						sfxVolume = source.getValue();
+						changeSettingsP.getSFX().setValue(sfxVolume);
+						pauseMenuP.getSFX().setValue(sfxVolume);
 
-					for (int i = 0; i < Sound.SFX.length; i++) {
-						if (sfxVolume > 5) {
-							if (sfxVolume == 10)
-								Sound.SFX[i].setMaximum();
-							else
-								Sound.SFX[i].setVolume((sfxVolume - 5));
-						} else {
-							if (sfxVolume == 0)
-								Sound.SFX[i].setMinimum();
-							else
-								Sound.SFX[i].setVolume(-10f * (5 - sfxVolume));
+						for (int i = 0; i < gm.getSFXLength(); i++) {
+							if (sfxVolume > 5) {
+								if (sfxVolume == 10)
+									gm.getSFX(i).setMaximum();
+								else
+									gm.getSFX(i).setVolume((sfxVolume - 5));
+							} else {
+								if (sfxVolume == 0)
+									gm.getSFX(i).setMinimum();
+								else
+									gm.getSFX(i).setVolume(-10f * (5 - sfxVolume));
+							}
 						}
 					}
-				}
 
-				else if(changeSettingsP.getMusics() == source || pauseMenuP.getMusics() == source)
-				{
-					musicVolume = (int)source.getValue();
-					changeSettingsP.getMusics().setValue(musicVolume);
-					pauseMenuP.getMusics().setValue(musicVolume);
-					if(musicVolume>5)
+					else if(changeSettingsP.getMusics() == source || pauseMenuP.getMusics() == source)
 					{
-						if(musicVolume == 10) Sound.BACK.setMaximum();
-						else Sound.BACK.setVolume((musicVolume-5));
-					}
-					else {
-						if(musicVolume == 0) Sound.BACK.setMinimum();
-						else Sound.BACK.setVolume(-10f*(5-musicVolume));
+						musicVolume = (int)source.getValue();
+						changeSettingsP.getMusics().setValue(musicVolume);
+						pauseMenuP.getMusics().setValue(musicVolume);
+						if(musicVolume>5)
+						{
+							if(musicVolume == 10) gm.setMaximumVolume();
+							else gm.setVolume((float)(musicVolume-5));
+						}
+						else {
+							if(musicVolume == 0) gm.setMinimumVolume();
+							else gm.setVolume(-10f*(5-musicVolume));
+						}
 					}
 				}
 			}
 		}
 	}
-}

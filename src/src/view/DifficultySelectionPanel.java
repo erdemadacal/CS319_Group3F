@@ -10,8 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import framework.Sound;
-
 public class DifficultySelectionPanel extends JPanel{
 
 	private static final long serialVersionUID = 1L;
@@ -22,7 +20,7 @@ public class DifficultySelectionPanel extends JPanel{
 	{
 		Font font = new Font("Verdana",Font.BOLD,40);
 		easy = new JButton("Easy");
-		easy.setBackground(Color.BLUE);
+		easy.setBackground(Color.GREEN);
 		easy.setFont(font);
 		
 		hard = new JButton("Hard");
@@ -56,9 +54,9 @@ public class DifficultySelectionPanel extends JPanel{
     {
     	super.paintComponent(g);
 
-    	easy.setLocation(320, 300);
+    	easy.setLocation(250, 350);
     	easy.setSize(200, 50);
-    	hard.setLocation(580, 300);
+    	hard.setLocation(580, 350);
     	hard.setSize(200, 50);
     	easy.setVisible(true);
     	hard.setVisible(true);
@@ -68,10 +66,10 @@ public class DifficultySelectionPanel extends JPanel{
     		 BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/background.jpg"));
     		 g.drawImage(image, 0, 0, null);
     		// draw title
-    		 g.setColor(Color.ORANGE);
+    		 g.setColor(Color.BLUE);
     	     Font titleFont = new Font("Verdana",Font.BOLD,45);
     	     g.setFont(titleFont);
-    	     g.drawString("Select Easy/Hard mode",250,150);
+    	     g.drawString("Select Easy/Hard mode",220,250);
     	 }
     	 catch(Exception e)
     	 {

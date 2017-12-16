@@ -23,27 +23,45 @@ import view.MainMenuView;
 
 public class GameManager implements GameManagerInterface {
 
-	MainMenuView view;
-	public Handler getHandler() {
-		return handler;
-	}
-
-	Handler handler;
+	private MainMenuView view;
+	private Handler handler;
+	public static boolean isEasy;
 	
 	public GameManager(MainMenuView view, Camera cam)
 	{
 		this.view = view;
 	    handler = new Handler(cam);
+	    isEasy = true;
 	}
 	
-	
-	
+	public Handler getHandler() {
+		return handler;
+	}
+
+	public boolean isEasy()
+	{
+		return isEasy;
+	}
+	public void setIsEasy(boolean easy)
+	{
+		isEasy = easy;
+	}
+	public void setLevel(int level)
+	{
+		handler.setLevel(level);
+	}
+
+	public int getLevel()
+	{
+		return handler.getLevel();
+	}
+
 	public void changeView(int i) //change view menus 
 	{
 		if(i == 0) // new game
 		{
 			view.displayLevelPanel(1); 
-			handler.loadLevel();
+			handler.loadLevel(true);
 			System.out.println("CHANGE VIEW");
 		}
 		else if (i == 1)
@@ -66,11 +84,15 @@ public class GameManager implements GameManagerInterface {
 			int level;
 			level = Integer.parseInt(str);
 			view.displayLevelPanel(level);
-			handler.loadLevel();
+			handler.loadLevel(false);
+		}
+		else if(i == 8)//continue from where you left the game, required for pause
+		{
+			view.displayLevelPanel(1); 
 		}
 	}
 	
-	
+	/*
 	public void switchLevel()
 	{
 		handler.switchLevel();
@@ -80,9 +102,14 @@ public class GameManager implements GameManagerInterface {
 	{
 		handler.loadLevel();
 	}
+	*/
 	public int getPlayerHealth()
 	{
 		return handler.getPlayerHealth();
+	}
+	public int getNumberOfDeaths()
+	{
+		return handler.getNumberOfDeaths();
 	}
 	
 	public void updateLevelView(int c) 
@@ -107,24 +134,24 @@ public class GameManager implements GameManagerInterface {
 					tempObject.setJumping(true);
 					tempObject.setVelY(-6);
 				}*/
-				if( c == 2 && !tempObject.isJumping() && tempObject.getVelY() < 1 && GamePanel.isEasy) 
+				if( c == 2 && !tempObject.isJumping() && tempObject.getVelY() < 1 && isEasy) 
 				{
 					tempObject.setJumping(true);
 					tempObject.setVelY(-10);
-					Sound.JUMP.play();
+					SoundManager.JUMP.play();
 				}
 				if(c == 3) { // shoot
 					if (tempObject.getColor() == ColorId.Blue) {
 						handler.addObject(new Bullet(tempObject.getX(), tempObject.getY(), ObjectId.Bullet, ColorId.Blue, tempObject.getFacing(), handler));
-						Sound.ATTACK.play();
+						SoundManager.ATTACK.play();
 					}
 					if (tempObject.getColor() == ColorId.Red) {
 						handler.addObject(new Bullet(tempObject.getX(), tempObject.getY(), ObjectId.Bullet, ColorId.Red, tempObject.getFacing(), handler));
-						Sound.ATTACK.play();
+						SoundManager.ATTACK.play();
 					}
 					if (tempObject.getColor() == ColorId.Green) {
 						handler.addObject(new Bullet(tempObject.getX(), tempObject.getY(), ObjectId.Bullet, ColorId.Green, tempObject.getFacing(), handler));
-						Sound.ATTACK.play();
+						SoundManager.ATTACK.play();
 					}
 				}
 				//System.out.println("PLAYER X " + tempObject.getVelX());
@@ -150,8 +177,19 @@ public class GameManager implements GameManagerInterface {
 	{
 		try {
 	        PrintWriter writer = new PrintWriter("level.txt", "UTF-8");
-	        String currentLevel = "" + GamePanel.LEVEL;
-	        writer.println(currentLevel); 
+	        String strCurrentLevel = "" + handler.getLevel();
+	        String noOfDeaths = "" + handler.getNumberOfDeaths();
+	        String health = "" + handler.getPlayerHealth();
+	        String easy = "";
+	        if(isEasy)
+	        	easy = "" + 1;
+	        else 
+	        	easy = "" + 0;
+	        
+	        writer.println(strCurrentLevel); 
+	        writer.println(noOfDeaths); 
+	        writer.println(health);
+	        writer.println(easy);
 	        writer.close();
 		}
 		catch(Exception e)
@@ -163,26 +201,73 @@ public class GameManager implements GameManagerInterface {
 	{
 		String line = "";
 		String level = "0"; 
+		String noOfDeaths = "-1";
+		String health = "-1";
+		String easy = "-1";
+		int intDeath = 0; 
+		int intHealth = 0; 
+		int intIsEasy = 1;
         BufferedReader reader = null;
+        int counter = 0;
         
 		try{	
 			reader = new BufferedReader(new FileReader("level.txt"));	
 		    line = reader.readLine();
+		    counter ++;
 		    while (line != null) 
 		    {
 		      System.out.println("LEVEL IN WHILE" + line);
-		      if(line != null)
+		      if(counter == 1)
 		      {
 		    	  level = line;
 		    	  System.out.println("LEVEL IN IF" + level);
 		      }
+		      if(counter == 2)
+		      {
+		    	  noOfDeaths = line; 
+		    	  System.out.println("DEATH IN IF" + noOfDeaths);
+		      }
+		      if(counter == 3)
+		      {
+		    	  health = line; 
+		    	  System.out.println("HEALTH IN IF" + health);
+		      } 
+		      if(counter == 4)
+		      {
+		    	  easy = line; 
+		    	  System.out.println("Easy IN IF" + isEasy);
+		      }
 		      line = reader.readLine();	  
+		      counter ++;
 		    }
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		
+		if(!noOfDeaths.equals("-1"))
+		{
+			intDeath = Integer.parseInt(noOfDeaths);
+			handler.setNumberOfDeaths(intDeath);
+			System.out.println("DEATH : " + intDeath);
+		}	
+		if(!health.equals("-1"))
+		{
+			intHealth = Integer.parseInt(health);
+			handler.setPlayerHealth(intHealth);
+			System.out.println("HEALTH : " + intHealth);
+		}
+		if(!easy.equals("-1"))
+		{
+			intIsEasy = Integer.parseInt(easy);
+			if(intIsEasy == 0)
+				isEasy = false;
+			else 
+				isEasy = true;
+			System.out.println("HEALTH : " + intHealth);
+		}
+		
 		
 		return level; //returns 0 if there is no previous game
 	}
@@ -212,11 +297,37 @@ public class GameManager implements GameManagerInterface {
 			
 			}
 		}
-
+       
 		view.updateGamePanel();
 	}
-	
-	
-	
-	
+	public void stopGame()
+	{
+		handler.clearLevel();
+		view.showGamePanel(false);
+		System.out.println("STOP GAME");
+	}
+	public void startSelectionEffect() {
+		SoundManager.SELECT.play();
+	}
+	public void startBackgroundLoop() {
+		SoundManager.BACK.loop();
+	}
+	public void stopBackgroundLoop() {
+		SoundManager.BACK.stop();
+	}
+	public void setVolume(Float f) {
+		SoundManager.BACK.setVolume(f);
+	}
+	public void setMinimumVolume() {
+		SoundManager.BACK.setMinimum();
+	}
+	public void setMaximumVolume() {
+		SoundManager.BACK.setMaximum();
+	}
+	public SoundManager getSFX(int i) {
+		return SoundManager.SFX[i];
+	}
+	public int getSFXLength() {
+		return SoundManager.SFX.length;
+	}
 }

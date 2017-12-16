@@ -1,7 +1,6 @@
 package view;
 
 import framework.GameObject;
-import framework.Sound;
 
 public class Camera  {
 	

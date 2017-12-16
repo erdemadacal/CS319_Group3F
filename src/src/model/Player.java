@@ -6,10 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
+import framework.GameManager;
 import framework.GameObject;
 import framework.Handler;
 import framework.ObjectId;
-import framework.Sound;
+import framework.SoundManager;
 import framework.Texture;
 import view.Camera;
 import view.GamePanel;
@@ -23,42 +24,62 @@ public class Player extends GameObject {
 	private Handler handler;
 	
 	private int health;
+	private int numberOfDeaths;
 	private boolean reachGoal;
     private boolean restart;
-	Texture tex = GamePanel.getInstance();
+    private boolean continueGame;
+    private boolean decrementHealth;
+    private boolean isEasy;
+	Texture tex;
 	
 	public Player(float x, float y, ObjectId id, ColorId color, Handler handler) {
 		super(x, y, id, color);
+		tex = GameMap.getInstance();
 		this.handler = handler;
 		reachGoal = false;
 		restart = false;
+		continueGame = false;
 		health = 5;
+		numberOfDeaths = 0;
+		decrementHealth = false;
+		isEasy = true;
 	}
+	public boolean IsEasy()
+	{
+		return isEasy;
+	}
+	public void setIsEasy(boolean easy)
+	{
+		isEasy = easy;
+	}
+
 
 	@Override
 	public void tick(LinkedList<GameObject> object) {
 		x += velX;
 		y += velY;
+		
 		if (velX < 0) facing = -1;
 		else if (velX > 0) facing = 1;
 		
 		if (falling || jumping) {
 			velY += gravity;
+			
 			if(velY > MAX_SPEED)
 				velY = MAX_SPEED;
 		}
 		// Jumping in hard difficulty
-		if (velY > 1 && !GamePanel.isEasy && !jumping) {
+		if (velY > 1 && !GameManager.isEasy && !jumping) {
 			jumping = true;
 			velY = -10;
 		}
 		// if player is sent off screen restart the level
 		if(y > GamePanel.HEIGHT)
 		{
-			
-			//restart = true;
-			System.out.println("PLAYER Y" + y);
-		   handler.loadLevel();
+		   restart = true;
+		   continueGame = false;
+		   //System.out.println("PLAYER Y" + y);
+		   //handler.loadLevel(true);
 		}
 		collision(object);
 
@@ -73,6 +94,15 @@ public class Player extends GameObject {
 		return restart;
 	}
 	
+	public void setContinueGame(boolean b)
+	{
+		continueGame = b;
+	}
+	public boolean getContinueGame()
+	{
+		return continueGame;
+	}
+	
 	public int getHealth()
 	{
 		return health;
@@ -83,6 +113,34 @@ public class Player extends GameObject {
 		this.health = health;
 	}
 	
+	public boolean getDecrementHealth() {
+		return decrementHealth;
+	}
+	
+	public void setDecrementHealth(boolean b)
+	{
+		decrementHealth = b;
+	}
+	
+	public void decrementHealth()
+	{
+		health--;
+	}
+	
+	public void incrementNumberOfDeaths()
+	{
+		numberOfDeaths++;
+	}
+	
+	public int getNumberOfDeaths()
+	{
+		return numberOfDeaths;
+	}
+	
+	public void setNumberOfDeaths(int death)
+	{
+		this.numberOfDeaths = death;
+	}
 	
 	private void collision(LinkedList<GameObject> object)
 	{
@@ -132,9 +190,17 @@ public class Player extends GameObject {
 				if(((Block)tempObject).getType() >= 8) {
 			     	if(getBounds().intersects(tempObject.getBounds()))
 			     	{
-			     		health--;
+			     		System.out.println("Decrement health");
+			     		//health--;
+			     		//numberOfDeaths++;
+			     		decrementHealth = true;
 			     	    if (health > 0)
-						   handler.loadLevel();
+			     	    {
+			     	    	continueGame = true;
+				     	    restart = false;
+			     	    }
+			     	       
+						  // handler.loadLevel(false);
 			     	}
 					}
 							
@@ -143,16 +209,24 @@ public class Player extends GameObject {
 				else if (tempObject.getId() == ObjectId.Gate) {
 					//switch level
 					if(getBounds().intersects(tempObject.getBounds())) {
-						Sound.GATE.play();
-					   handler.switchLevel();
+					   //handler.switchLevel();
+					   reachGoal = true;
+					   SoundManager.GATE.play();
 					}
 				} 
 				// Collision with the enemy on any side
 				else if (tempObject.getId() == ObjectId.Enemy) {
 					if (getBounds().intersects(tempObject.getBounds())){
-						health--;
+						//health--;
+						//numberOfDeaths++;
+						decrementHealth= true;
 			     	    if (health > 0)
-						   handler.loadLevel();	
+			     	    {
+			     	    	continueGame = true;
+			     	    	restart = false;
+			     	    }
+			     	       
+						  // handler.loadLevel(false);	
 					}
 				}
 			
@@ -172,6 +246,7 @@ public class Player extends GameObject {
 	@Override
 	// Renders the players on the panel
 	public void render(Graphics g) {
+		
 		// Render players blue sprite
 		if(this.color == ColorId.Blue) {
 			if(facing == 1)
