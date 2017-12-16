@@ -6,7 +6,7 @@ import view.BufferedImageLoader;
 
 public class Texture {
 
-	SpriteSheet bs, ps, bl, ws, js, fs;
+	SpriteSheet bs, ps, bl, ws, js, fs, pats;
 	
 	private BufferedImage block_sheet = null;
 	private BufferedImage player_sheet = null;
@@ -14,6 +14,7 @@ public class Texture {
 	private BufferedImage walker_sheet = null;
 	private BufferedImage jumper_sheet = null;
 	private BufferedImage floater_sheet = null;
+	private BufferedImage patroller_sheet = null;
 	
 	
 	
@@ -24,6 +25,7 @@ public class Texture {
 	public BufferedImage[] walker = new BufferedImage[3];
 	public BufferedImage[] jumper = new BufferedImage[3];
 	public BufferedImage[] floater = new BufferedImage[3];
+	public BufferedImage[] patroller = new BufferedImage[6];
 	public BufferedImage gate = null;
 	
 	
@@ -38,6 +40,7 @@ public class Texture {
 			walker_sheet  = loader.loadImage("/Walker_Sheet.png");
 			jumper_sheet  = loader.loadImage("/Jumper_Sheet.png");
 			floater_sheet = loader.loadImage("/Floater_Sheet.png");
+			patroller_sheet = loader.loadImage("/Patroller_Sheet.png");
 			gate = loader.loadImage("/Gate.png");
 		
 			
@@ -52,6 +55,7 @@ public class Texture {
 		ws = new SpriteSheet(walker_sheet);
 		js = new SpriteSheet(jumper_sheet);
 		fs = new SpriteSheet(floater_sheet);
+		pats = new SpriteSheet(patroller_sheet);
 		
 		getTextures();
 	}
@@ -97,6 +101,13 @@ public class Texture {
 		floater[0] = fs.grabImage(0, 0, 64, 64); 	// Blue Floater
 		floater[1] = fs.grabImage(0, 1, 64, 64); 	// Red Floater
 		floater[2] = fs.grabImage(0, 2, 64, 64);	// Green Floater
+		// Patroller
+		patroller[0] = pats.grabImage(0, 0, 64, 64);	// Blue  Patroller Left
+		patroller[1] = pats.grabImage(1, 0, 64, 64);	// Blue  Patroller Right
+		patroller[2] = pats.grabImage(0, 1, 64, 64);	// Red   Patroller Left
+		patroller[3] = pats.grabImage(1, 1, 64, 64);	// Red   Patroller Right
+		patroller[4] = pats.grabImage(0, 2, 64, 64);	// Green Patroller Left
+		patroller[5] = pats.grabImage(1, 2, 64, 64);	// Green Patroller Right
 	}
 	
 	
