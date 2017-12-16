@@ -4,21 +4,11 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-
-import model.Block;
 import model.Bullet;
 import model.ColorId;
-import model.Flag;
-import model.Player;
-import view.BufferedImageLoader;
 import view.Camera;
-import view.GamePanel;
 import view.MainMenuView;
 
 public class GameManager implements GameManagerInterface {
@@ -311,4 +301,29 @@ public class GameManager implements GameManagerInterface {
 	
 	
 	
+	public void startSelectionEffect() {
+		SoundManager.SELECT.play();
+	}
+	public void startBackgroundLoop() {
+		SoundManager.BACK.loop();
+	}
+	public void stopBackgroundLoop() {
+		SoundManager.BACK.stop();
+	}
+	public void setVolume(Float f) {
+		SoundManager.BACK.setVolume(f);
+	}
+	public void setMinimumVolume() {
+		SoundManager.BACK.setMinimum();
+	}
+	public void setMaximumVolume() {
+		SoundManager.BACK.setMaximum();
+	}
+	public SoundManager getSFX(int i) {
+		return SoundManager.SFX[i];
+	}
+	public int getSFXLength() {
+		return SoundManager.SFX.length;
+	}
+}
 }
