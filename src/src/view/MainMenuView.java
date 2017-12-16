@@ -353,22 +353,23 @@ public class MainMenuView implements  Runnable, KeyListener{
 			if (mainMenuP.getNewGameButton() == event.getSource()) {
 				gm.changeView(6);
 				Sound.SELECT.play();
-				Sound.BACK.loop();
-				//Sound s = new Sound();
 				} 
 			else if (difficultySelectionPanel.getEasyButton() == event.getSource())
 			{
 				gm.changeView(0);
 				Sound.SELECT.play();
+				Sound.BACK.loop();
 			}
 			else if (difficultySelectionPanel.getHardButton() == event.getSource())
 			{
 				gm.changeView(0);
 				Sound.SELECT.play();
+				Sound.BACK.loop();
 			}
 			else if (mainMenuP.getContinueGameButton() == event.getSource()) {
 				gm.changeView(7); // gm levelView
 				Sound.SELECT.play();
+				Sound.BACK.loop();
 			}
 			else if (mainMenuP.getChangeSettingsButton() == event.getSource()) {
 				gm.changeView(1);
@@ -389,54 +390,76 @@ public class MainMenuView implements  Runnable, KeyListener{
 
 			else if (creditsP.getReturnButton() == event.getSource()) {
 				gm.changeView(4);
-				Sound.SELECT.play();
+				Sound.OPTION.play();
 			} 
 			else if (changeSettingsP.getReturnButton() == event.getSource()) {
 				gm.changeView(4);
-				Sound.SELECT.play();
+				Sound.OPTION.play();
 			}
 			else if (helpP.getReturnButton() == event.getSource()) {
 				gm.changeView(4);
-				Sound.SELECT.play();
+				Sound.OPTION.play();
 			}
 			else if(pauseMenuP.getResumeButton() == event.getSource()) {
 				gm.changeView(0);
-				Sound.SELECT.play();
+				Sound.OPTION.play();
 			}
 			else if(pauseMenuP.getReturnButton()== event.getSource()) {
 				gm.changeView(4);
-				Sound.SELECT.play();
+				Sound.OPTION.play();
+				Sound.BACK.stop();
 			}
 			else if(pauseMenuP.getViewHelpButton() == event.getSource()) {
 				gm.changeView(2);
-				Sound.SELECT.play();
+				Sound.OPTION.play();
 			}
 			
 		}
         @Override
 		public void stateChanged(ChangeEvent e)
 		{
-        	int sfxVolume = 5; //defaultVolume
-        	int musicVolume = 5; //defaultVolume
-        	JSlider source = (JSlider)e.getSource();
-        	
-            if (!source.getValueIsAdjusting()) {
-            	if(changeSettingsP.getSFX() == source || pauseMenuP.getSFX() == source  )
-            	{
-            		sfxVolume = (int)source.getValue();
-            		System.out.println("SFX VOLUME " + sfxVolume);
-            		changeSettingsP.getSFX().setValue(sfxVolume);
-            		pauseMenuP.getSFX().setValue(sfxVolume);
-            	}
-            		
-                else if(changeSettingsP.getMusics() == source || pauseMenuP.getMusics() == source)
-                {
-                	musicVolume = (int)source.getValue();
-                	System.out.println("MUSIC VOLUME " + musicVolume);
-                	changeSettingsP.getMusics().setValue(musicVolume);
-            		pauseMenuP.getMusics().setValue(musicVolume);
-                }
-            }    
+			int sfxVolume;
+			int musicVolume;
+			JSlider source = (JSlider)e.getSource();
+
+			if (!source.getValueIsAdjusting()) {
+				if(changeSettingsP.getSFX() == source || pauseMenuP.getSFX() == source  )
+				{
+					sfxVolume = source.getValue();
+					changeSettingsP.getSFX().setValue(sfxVolume);
+					pauseMenuP.getSFX().setValue(sfxVolume);
+
+					for (int i = 0; i < Sound.SFX.length; i++) {
+						if (sfxVolume > 5) {
+							if (sfxVolume == 10)
+								Sound.SFX[i].setMaximum();
+							else
+								Sound.SFX[i].setVolume((sfxVolume - 5));
+						} else {
+							if (sfxVolume == 0)
+								Sound.SFX[i].setMinimum();
+							else
+								Sound.SFX[i].setVolume(-10f * (5 - sfxVolume));
+						}
+					}
+				}
+
+				else if(changeSettingsP.getMusics() == source || pauseMenuP.getMusics() == source)
+				{
+					musicVolume = (int)source.getValue();
+					changeSettingsP.getMusics().setValue(musicVolume);
+					pauseMenuP.getMusics().setValue(musicVolume);
+					if(musicVolume>5)
+					{
+						if(musicVolume == 10) Sound.BACK.setMaximum();
+						else Sound.BACK.setVolume((musicVolume-5));
+					}
+					else {
+						if(musicVolume == 0) Sound.BACK.setMinimum();
+						else Sound.BACK.setVolume(-10f*(5-musicVolume));
+					}
+				}
+			}
 		}
 	}
 }
