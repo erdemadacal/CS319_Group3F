@@ -20,8 +20,6 @@ public class Player extends GameObject {
 	private float width = 64, height = 64;
 	private float gravity = 0.3f;
 	private final float MAX_SPEED = 10f;
-
-	private Handler handler;
 	
 	private int health;
 	private int numberOfDeaths;
@@ -32,10 +30,9 @@ public class Player extends GameObject {
     private boolean isEasy;
 	Texture tex;
 	
-	public Player(float x, float y, ObjectId id, ColorId color, Handler handler) {
+	public Player(float x, float y, ObjectId id, ColorId color) {
 		super(x, y, id, color);
 		tex = GameMap.getInstance();
-		this.handler = handler;
 		reachGoal = false;
 		restart = false;
 		continueGame = false;
@@ -78,8 +75,6 @@ public class Player extends GameObject {
 		{
 		   restart = true;
 		   continueGame = false;
-		   //System.out.println("PLAYER Y" + y);
-		   //handler.loadLevel(true);
 		}
 		collision(object);
 
@@ -144,12 +139,29 @@ public class Player extends GameObject {
 	
 	private void collision(LinkedList<GameObject> object)
 	{
+		if(object != null)
 		for(int i = 0; i < object.size(); i++)
 		{
 			GameObject tempObject = object.get(i);
 			// Collision with blocks
 			if(tempObject.getId() == ObjectId.Block)
 			{
+				
+				// Collision with spikes
+				if(((Block)tempObject).getType() >= 8) {
+			     	if(getBounds().intersects(tempObject.getBounds()))
+			     	{
+			     		System.out.println("Decrement health");
+			     		decrementHealth = true;
+			     	    if (health > 0)
+			     	    {
+			     	    	continueGame = true;
+				     	    restart = false;
+			     	    }
+			     	    
+			     	}
+				}
+				
 				// Collision with solid blocks and fading blocks
 			    if(tempObject.getColor() != color) {
 					// making the fading blocks start to fade
@@ -186,30 +198,13 @@ public class Player extends GameObject {
 					}
 			}
 							
-				// Collision with spikes
-				if(((Block)tempObject).getType() >= 8) {
-			     	if(getBounds().intersects(tempObject.getBounds()))
-			     	{
-			     		System.out.println("Decrement health");
-			     		//health--;
-			     		//numberOfDeaths++;
-			     		decrementHealth = true;
-			     	    if (health > 0)
-			     	    {
-			     	    	continueGame = true;
-				     	    restart = false;
-			     	    }
-			     	       
-						  // handler.loadLevel(false);
-			     	}
-					}
+				
 							
-				}
+		}
 				// Collision with the level goal
 				else if (tempObject.getId() == ObjectId.Gate) {
 					//switch level
 					if(getBounds().intersects(tempObject.getBounds())) {
-					   //handler.switchLevel();
 					   reachGoal = true;
 					   SoundManager.GATE.play();
 					}
@@ -217,16 +212,13 @@ public class Player extends GameObject {
 				// Collision with the enemy on any side
 				else if (tempObject.getId() == ObjectId.Enemy) {
 					if (getBounds().intersects(tempObject.getBounds())){
-						//health--;
-						//numberOfDeaths++;
 						decrementHealth= true;
 			     	    if (health > 0)
 			     	    {
 			     	    	continueGame = true;
 			     	    	restart = false;
 			     	    }
-			     	       
-						  // handler.loadLevel(false);	
+			     	       	
 					}
 				}
 			

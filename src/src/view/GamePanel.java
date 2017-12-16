@@ -156,7 +156,7 @@ public class GamePanel extends JPanel {
 			case 2:
 				return 43 * 32;
 			default:
-				return 25 * 32;
+				return 43 * 32;
 		}
 		
 	}

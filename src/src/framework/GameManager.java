@@ -296,11 +296,6 @@ public class GameManager implements GameManagerInterface {
 		view.showGamePanel(false);
 		System.out.println("STOP GAME");
 	}
-	
-	
-	
-	
-	
 	public void startSelectionEffect() {
 		SoundManager.SELECT.play();
 	}

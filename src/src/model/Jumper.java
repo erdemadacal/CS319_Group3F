@@ -13,17 +13,13 @@ import view.GamePanel;
 
 public class Jumper extends Enemy {
 
-	
-	private Handler handler;
-	
 	Texture tex;
 	
-	public Jumper(float x, float y, int maxHealth, ObjectId id, ColorId color, Handler handler) {// 
+	public Jumper(float x, float y, int maxHealth, ObjectId id, ColorId color) { 
 		super(x, y, maxHealth, id, color);
 		tex = GameMap.getInstance();
-		//this.handler = handler;
 		velX = 2;
-		//remove = false;
+		remove = false;
 		
 	}
 
@@ -49,8 +45,7 @@ public class Jumper extends Enemy {
 		collision(object);
 		
 		if(this.isDead())
-			handler.removeObject(this);
-		    //remove = true;
+		    remove = true;
 	}
 	
 	private void collision(LinkedList<GameObject> object)

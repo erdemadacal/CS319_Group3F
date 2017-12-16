@@ -21,14 +21,12 @@ public class Block extends GameObject {
 	private double alpha = 255;
 	private BufferedImage image;
 	private boolean fading = false;
-	private Handler handler;
-	//private boolean remove;
+	private boolean remove;
 	
-	public Block(float x, float y, int type, ObjectId id, ColorId color, Handler handler) {
+	public Block(float x, float y, int type, ObjectId id, ColorId color) {
 		super(x, y, id, color);
-		this.handler = handler;
 		tex = GameMap.getInstance();
-		//remove = false;
+		remove = false;
 		this.type = type;
 		this.image = new BufferedImage(tex.block[type].getWidth(),tex.block[type].getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = image.createGraphics();
@@ -51,11 +49,11 @@ public class Block extends GameObject {
 	}
 	
 	
-	/*public boolean getRemove()
+	public boolean getRemove()
 	{
 		return remove;
 	}
-*/
+
 	public void tick(LinkedList<GameObject> object) {
 		/*if(type >= 4 && type < 8 && x == 384) {
 			System.out.println("x: " + x + " ___y: " + y + " ___fading: " + fading + " ___alpha: " + alpha);
@@ -65,8 +63,7 @@ public class Block extends GameObject {
 			alpha--;
 		}
 		if(alpha <= 50) {
-			//remove = true;
-			handler.removeObject(this);
+			remove = true;
 		}
 
 	}

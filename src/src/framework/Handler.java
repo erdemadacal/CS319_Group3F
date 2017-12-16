@@ -34,8 +34,8 @@ public class Handler
 		currentLevel = 1;
 		BufferedImageLoader loader = new BufferedImageLoader();
 		level1 = loader.loadImage("/level1.png");			// loading level
-		level3 = loader.loadImage("/level2.png");
-		level2 = loader.loadImage("/level3.png");
+		level2 = loader.loadImage("/level2.png");
+		level3 = loader.loadImage("/level3.png");
 		level4 = loader.loadImage("/level4.png");
 		level5 = loader.loadImage("/level5.png");
 		
@@ -89,38 +89,38 @@ public class Handler
 				// create blocks
 				// create solid blocks
 				if (red == 0 && green == 0 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 0, ObjectId.Block, ColorId.Black,this));
+					addObject(new Block(xx*32, yy*32, 0, ObjectId.Block, ColorId.Black));
 				if (red == 255 && green == 0 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 1, ObjectId.Block, ColorId.Red,this));
+					addObject(new Block(xx*32, yy*32, 1, ObjectId.Block, ColorId.Red));
 				if (red == 0 && green == 0 && blue == 255)
-					addObject(new Block(xx*32, yy*32, 2, ObjectId.Block, ColorId.Blue,this));
+					addObject(new Block(xx*32, yy*32, 2, ObjectId.Block, ColorId.Blue));
 				if (red == 0 && green == 255 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 3, ObjectId.Block, ColorId.Green,this));
+					addObject(new Block(xx*32, yy*32, 3, ObjectId.Block, ColorId.Green));
 				
 				// create fading blocks
 				if (red == 50 && green == 50 && blue == 50)
-					addObject(new Block(xx*32, yy*32, 4, ObjectId.Block, ColorId.Black,this));
+					addObject(new Block(xx*32, yy*32, 4, ObjectId.Block, ColorId.Black));
 				if (red == 200 && green == 0 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 5, ObjectId.Block, ColorId.Red,this ));
+					addObject(new Block(xx*32, yy*32, 5, ObjectId.Block, ColorId.Red));
 				if (red == 0 && green == 0 && blue == 200)
-					addObject(new Block(xx*32, yy*32, 6, ObjectId.Block, ColorId.Blue,this));
+					addObject(new Block(xx*32, yy*32, 6, ObjectId.Block, ColorId.Blue));
 				if (red == 0 && green == 200 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 7, ObjectId.Block, ColorId.Green,this));
+					addObject(new Block(xx*32, yy*32, 7, ObjectId.Block, ColorId.Green));
 				
 				// create spikes
 				if (red == 100 && green == 100 && blue == 100)
-					addObject(new Block(xx*32, yy*32, 8, ObjectId.Block, ColorId.Black,this));
+					addObject(new Block(xx*32, yy*32, 8, ObjectId.Block, ColorId.Black));
 				if (red == 150 && green == 0 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 9, ObjectId.Block, ColorId.Red,this));
+					addObject(new Block(xx*32, yy*32, 9, ObjectId.Block, ColorId.Red));
 				if (red == 0 && green == 0 && blue == 150)
-					addObject(new Block(xx*32, yy*32, 10, ObjectId.Block, ColorId.Blue,this));
+					addObject(new Block(xx*32, yy*32, 10, ObjectId.Block, ColorId.Blue));
 				if (red == 0 && green == 150 && blue == 0)
-					addObject(new Block(xx*32, yy*32, 11, ObjectId.Block, ColorId.Green,this));
+					addObject(new Block(xx*32, yy*32, 11, ObjectId.Block, ColorId.Green));
 				
 				
 				// create player
 				if (red == 150 && green == 150 && blue == 150)
-					addObject(new Player(xx*32, yy*32, ObjectId.Player, ColorId.Blue, this));
+					addObject(new Player(xx*32, yy*32, ObjectId.Player, ColorId.Blue));
 				
 				// create gate (level goal)
 				if (red == 255 && green == 255 && blue == 0)
@@ -129,25 +129,25 @@ public class Handler
 				// create enemies
 				// create walkers
 				if(red == 255 && green == 10 && blue == 10)
-					addObject(new Walker(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Red, this));
+					addObject(new Walker(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Red));
 				if(red == 10 && green == 255 && blue == 10)
-					addObject(new Walker(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green, this));
+					addObject(new Walker(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green));
 				if(red == 10 && green == 10 && blue == 255)
-					addObject(new Walker(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue, this));
+					addObject(new Walker(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue));
 				// create jumpers
 				if(red == 255 && green == 50 && blue == 50)
-					addObject(new Jumper(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Red, this));
+					addObject(new Jumper(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Red));
 				if(red == 50 && green == 255 && blue == 50)
-					addObject(new Jumper(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green, this));
+					addObject(new Jumper(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green));
 				if(red == 50 && green == 50 && blue == 255)
-					addObject(new Jumper(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue, this));
+					addObject(new Jumper(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue));
 				// create floaters
 				if(red == 255 && green == 100 && blue == 100)
-					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Red, this));
+					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Red));
 				if(red == 100 && green == 255 && blue == 100)
-					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green, this));
+					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Green));
 				if(red == 100 && green == 100 && blue == 255)
-					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue, this));
+					addObject(new Floater(xx*32, yy*32, 3, ObjectId.Enemy, ColorId.Blue));
 				
 			}
 		}

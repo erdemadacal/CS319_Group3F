@@ -13,22 +13,19 @@ import view.GamePanel;
 
 public class Floater extends Enemy {
 
-	
-	private Handler handler;
 	// Range must always be a "positive" integer
 	private int range = 5;
 	private float initialX, finalX;
 	
 	Texture tex;
 	
-	public Floater(float x, float y, int maxHealth, ObjectId id, ColorId color, Handler handler) {
+	public Floater(float x, float y, int maxHealth, ObjectId id, ColorId color) {
 		super(x, y, maxHealth, id, color);
 		tex = GameMap.getInstance();
-		this.handler = handler;
 		velX = 2;
 		initialX = x;
 		finalX = x + range * 32;
-		//remove = false;
+		remove = false;
 	}
 
 	@Override
@@ -47,9 +44,7 @@ public class Floater extends Enemy {
 			velX = -2;
 		
 		if(this.isDead())
-			//remove = true;
-			handler.removeObject(this);
-		
+			remove = true;
 	}
 	
 	private void collision(LinkedList<GameObject> object)

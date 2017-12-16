@@ -189,10 +189,8 @@ public class MainMenuView implements  Runnable, KeyListener{
     	   }*/
     	   else if(c == KeyEvent.VK_P)
     	   {
-    		   boolean inPauseMenu = false;
-    		   if(inPauseMenu)
-    		   gm.changeView(8);
-    		   else gm.changeView(5);   
+    		   //System.out.println("PauseGame");
+    		   gm.changeView(5);
     	   }
     	    // Change player's color based on use input
 			// Z for Blue, X for Red, C for Green
@@ -299,7 +297,8 @@ public class MainMenuView implements  Runnable, KeyListener{
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while(delta >= 1){
-				gamePanel.tick();
+				if(gamePanel != null)
+					gamePanel.tick();
 				updates++;
 				delta--;
 			}

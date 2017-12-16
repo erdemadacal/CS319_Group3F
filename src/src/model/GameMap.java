@@ -47,12 +47,15 @@ public class GameMap {
 		int playerHealth = -1; // not valid
 		for(int i = 0; i < object.size(); i++) 
 		{
-			GameObject tempObject = object.get(i);
-			
-			if(tempObject.getId() == ObjectId.Player)
+			tempObject = object.get(i);
+			if(tempObject != null)
 			{
-				playerHealth = ((Player)tempObject).getHealth();	
+				if(tempObject.getId() == ObjectId.Player)
+				{
+					playerHealth = ((Player)tempObject).getHealth();	
+				}
 			}
+			
 		}
 		return playerHealth;
 		
@@ -104,8 +107,11 @@ public class GameMap {
 	public void tick() {
 		for(int i = 0; i < object.size(); i++)
 		{
-			tempObject = object.get(i);
-			tempObject.tick(object);
+
+			GameObject	tempObject = object.get(i);
+			if(tempObject != null)
+			{
+				tempObject.tick(object);
 			
 			if(tempObject.getId() == ObjectId.Player)
 			{
@@ -133,11 +139,11 @@ public class GameMap {
 				
 				
 			}
-			/*else if(tempObject.getId() == ObjectId.Bullet)
+			else if(tempObject.getId() == ObjectId.Bullet)
 			{
 				if(((Bullet)tempObject).getRemove())
 				{
-					removeObject(tempObject);		
+					removeObject(tempObject);
 				}
 			}
 			else if(tempObject.getId() == ObjectId.Block)
@@ -153,8 +159,9 @@ public class GameMap {
 				{
 					removeObject(tempObject);		
 				}
-			}*/
+			}
 			
+			}
 		}
 	}
 	
@@ -184,10 +191,18 @@ public class GameMap {
 
 	public void render(Graphics g)
 	{
-		for(int i = 0; i < object.size(); i++ )
+		if(object != null )
 		{
-			tempObject = object.get(i);
-			tempObject.render(g);
+			if(!object.isEmpty())
+			{
+				for(int i = 0; i < object.size(); i++ )
+				{
+					tempObject = object.get(i);
+					tempObject.render(g);
+				}
+			}
+			
 		}
+		
 	}
 }

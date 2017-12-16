@@ -12,25 +12,24 @@ public abstract class Enemy extends GameObject {
 	protected float width = 64, height = 64;
 	protected float gravity = 0.3f;
 	protected final float MAX_SPEED = 10f;
-	//protected boolean remove;
+	protected boolean remove;
 
 	public Enemy(float x, float y, int maxHealth, ObjectId id, ColorId color) {
 		super(x, y, id,color);
 		this.maxHealth = maxHealth;
 		health = maxHealth;
 		
-		//remove = false;
+		remove = false;
 	}
 
 	public int getHealth() {
 		return health;
 	}
 
-	/*public boolean getRemove()
+	public boolean getRemove()
 	{
 		return remove;
 	}
-	*/
 	public void reduceHealth(int reductionAmount) {
 		this.health -= reductionAmount;
 	}
