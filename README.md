@@ -16,3 +16,5 @@ contain  power-ups such as med-kits, increase bullet power, speed-up etc. The en
 (eg. simply walk left-right, shoot if the player is in the direction it is facing, constantly jump while moving etc.).
 
 <img src="https://i.imgflip.com/216ps2.gif"/>
+
+[DOWNLOAD EXECUTABLE JAR FILE](https://github.com/erdemadacal/CS319_Group3F/raw/master/Color_Shooter.jar)
