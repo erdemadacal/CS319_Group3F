@@ -1,7 +1,10 @@
 # Color Shooter: The Spectrum Adventurer (Group3F)
 CS319 Object Oriented Software Engineering Fall'17 <br/>
 __Instructor:__ Bora Güngören <br/>
-__Section 3 – Group 3F__       
+__Section 3 – Group 3F__  
+
+[DOWNLOAD EXECUTABLE JAR FILE](https://github.com/erdemadacal/CS319_Group3F/raw/master/Color_Shooter_v2.jar)
+
 * [İrem Ural, 21502278](https://github.com/iremural/)
 * [Alper Mehmet Özdemir, 21501955](https://github.com/AlperMehmetOzdemir)       
 * [Hasan Selim Yağcı, 21402052](https://github.com/selimyagci/)
@@ -17,4 +20,4 @@ contain  power-ups such as med-kits, increase bullet power, speed-up etc. The en
 
 <img src="https://i.imgflip.com/216ps2.gif"/>
 
-[DOWNLOAD EXECUTABLE JAR FILE](https://github.com/erdemadacal/CS319_Group3F/raw/master/Color_Shooter.jar)
+[DOWNLOAD EXECUTABLE JAR FILE](https://github.com/erdemadacal/CS319_Group3F/raw/master/Color_Shooter_v2.jar)
